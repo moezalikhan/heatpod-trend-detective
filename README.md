@@ -119,6 +119,12 @@ pipeline/tests/, tests/ pipeline unit tests and Streamlit AppTests
 data/results/           small results files read by the app
 .github/workflows/      ci.yml (every push), release.yml (tests, then update `live`)
 ```
+## Team
+
+| Name | Role |
+|---|---|
+| Moez Ali Khan | Project lead and developer |
+| Husnain Feroz | Quality review and testing |
 
 ## Credits and use of AI
 
