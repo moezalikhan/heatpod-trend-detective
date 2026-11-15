@@ -7,7 +7,8 @@ Facts checked against the live API on 2026-11-15:
 - Tiles of at most 4.5 x 4.5 degrees (config/regions.yaml).
 - About 30 requests per 60 seconds, so requests are spaced out.
 - The grid is MERRA-2: 0.5 degrees latitude x 0.625 degrees longitude. Tiles that
-  share an edge on a grid line return that line twice; merge() removes duplicates.
+  share an edge on a grid line return that line twice; merge_tiles() removes
+  duplicates and checks the values agree.
 
 Files:
   data/raw/<region>/<CODE>/tile<N>_<YEAR>.nc   one cached API response each

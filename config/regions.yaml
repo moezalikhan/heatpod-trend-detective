@@ -1,7 +1,7 @@
 # Study regions (docs/PLAN.md Section 3).
 # Boxes are in degrees: latitude south to north, longitude west to east.
 # NASA POWER regional requests allow at most about 4.5 x 4.5 degrees,
-# so each box is split into 2 x 2 tiles of equal size.
+# so larger boxes are split into tiles of equal size.
 max_tile_degrees: 4.5
 
 regions:
@@ -20,17 +20,16 @@ regions:
       - {lat_min: 27.75, lat_max: 31.0,  lon_min: -87.6, lon_max: -83.8}
       - {lat_min: 27.75, lat_max: 31.0,  lon_min: -83.8, lon_max: -80.0}
 
-  punjab:
-    name: Punjab, Pakistan
+  phoenix:
+    name: Phoenix, Arizona
     climate: dry heat
+    # Centered on Phoenix (33.45 N, 112.07 W): Sonoran Desert lowlands in the
+    # south, higher plateau toward Flagstaff in the north. Fits in one tile.
     box:
-      lat_min: 28.0
-      lat_max: 34.0
-      lon_min: 69.5
-      lon_max: 75.5
+      lat_min: 31.5
+      lat_max: 35.5
+      lon_min: -114.5
+      lon_max: -110.0
     land_mask: true
     tiles:
-      - {lat_min: 28.0, lat_max: 31.0, lon_min: 69.5, lon_max: 72.5}
-      - {lat_min: 28.0, lat_max: 31.0, lon_min: 72.5, lon_max: 75.5}
-      - {lat_min: 31.0, lat_max: 34.0, lon_min: 69.5, lon_max: 72.5}
-      - {lat_min: 31.0, lat_max: 34.0, lon_min: 72.5, lon_max: 75.5}
+      - {lat_min: 31.5, lat_max: 35.5, lon_min: -114.5, lon_max: -110.0}

@@ -5,11 +5,12 @@ import pytest
 from config.catalog import load_regions
 
 
-def test_both_regions_load_with_four_tiles():
+def test_both_regions_load_with_tiles_inside_the_limit():
     regions = load_regions()
-    assert set(regions) == {"florida", "punjab"}
+    assert set(regions) == {"florida", "phoenix"}
+    assert len(regions["florida"].tiles) == 4
+    assert len(regions["phoenix"].tiles) == 1
     for r in regions.values():
-        assert len(r.tiles) == 4
         assert all(t.height <= 4.5 and t.width <= 4.5 for t in r.tiles)
 
 

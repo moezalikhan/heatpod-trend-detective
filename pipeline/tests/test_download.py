@@ -123,7 +123,7 @@ def test_fetch_rejects_json_error_with_status_200(tmp_path):
 # --- merging ----------------------------------------------------------------
 
 def test_merge_tiles_with_shared_edge_gives_full_grid():
-    # Like Punjab: both tiles include the grid line at lat 31.0.
+    # Tiles that meet on a grid line both include it (here lat 31.0).
     full = fake_grid([28.0, 28.5, 31.0, 31.5], [70.0, 70.625])
     south = full.sel(lat=[28.0, 28.5, 31.0])
     north = full.sel(lat=[31.0, 31.5])

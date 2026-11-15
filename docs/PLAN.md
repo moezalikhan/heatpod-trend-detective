@@ -16,7 +16,7 @@ A web app where a student picks a weather variable and a place. It shows 45 year
 2. **Is it changing the same way everywhere?** POD (Proper Orthogonal Decomposition) pattern map.
 3. **Are the worst days getting worse?** Extreme value analysis.
 
-Two ready demos: **Florida** (humid heat) and **Punjab, Pakistan** (dry heat).
+Two ready demos: **Florida** (humid heat) and **Phoenix, Arizona** (dry heat).
 
 ---
 
@@ -39,7 +39,7 @@ Two ready demos: **Florida** (humid heat) and **Punjab, Pakistan** (dry heat).
 - **Coverage:** daily data from 1 January 1981 to near real time, about 55 km resolution, no API key needed.
 - **Limits to plan around:**
   - Regional requests allow only **one parameter per request**.
-  - Maximum area per regional request is about **4.5 x 4.5 degrees**, so Florida and Punjab each need about 4 tiles.
+  - Maximum area per regional request is about **4.5 x 4.5 degrees**, so Florida needs 4 tiles and Phoenix fits in 1 tile.
   - About **30 requests per 60 seconds**, so the downloader must pause between requests.
 
 ### Variables (keep to 4 plus heat index)
@@ -57,7 +57,7 @@ Heat index uses the NOAA (National Oceanic and Atmospheric Administration) formu
 ### Regions
 
 - **Florida:** latitude 24.5 to 31.0, longitude minus 87.6 to minus 80.0
-- **Punjab, Pakistan:** latitude 28.0 to 34.0, longitude 69.5 to 75.5
+- **Phoenix, Arizona:** latitude 31.5 to 35.5, longitude minus 114.5 to minus 110.0 (Sonoran Desert lowlands to the plateau near Flagstaff)
 - Ocean grid cells are removed with a land mask (Florida's box contains a lot of sea).
 
 ---
@@ -432,7 +432,7 @@ Each module is one Claude Code session. Finish and test one before starting the 
 **Module 8. App shell and investigation flow**
 - Load `styles.css` and set the page layout (`st.set_page_config(layout="wide")`)
 - `data_loader.py` with `st.cache_data`
-- Sidebar: steps 1 What (variable picker with definitions), 2 Where (Florida, Punjab), 3 Evidence, 4 Patterns, 5 Extremes
+- Sidebar: steps 1 What (variable picker with definitions), 2 Where (Florida, Phoenix), 3 Evidence, 4 Patterns, 5 Extremes
 - "Watch a demo" button that sets Florida and heat index and walks through the steps, using `st.session_state` to remember the current step
 - **Done when:** all steps are clickable with placeholder charts, live on the app
 
@@ -482,12 +482,12 @@ Each module is one Claude Code session. Finish and test one before starting the 
 |---|---|---|
 | 1 | 0 (repository, theme, CI/CD, Community Cloud), 1, 2 (start Florida downloads early) | 2 hours |
 | 2 | 3, 4 | 2 hours |
-| 3 | 8 (app shell, while Punjab downloads) | 1 hour |
+| 3 | 8 (app shell, while Phoenix downloads) | 1 hour |
 | 4 | 5, 6 | 2 hours |
 | 5 | 7, 9, 10 | 2.5 hours |
 | 6 | 11, 12, submit with at least 1 hour to spare | 1.5 hours |
 
-**If time runs short, cut in this order:** Punjab demo, bootstrap intervals, per cell extremes (keep region wide only), explainer notes.
+**If time runs short, cut in this order:** Phoenix demo, bootstrap intervals, per cell extremes (keep region wide only), explainer notes.
 
 **Never cut:** the trend test and verdict box (the challenge's core requirement), and the automatic release pipeline (it guarantees a working live link).
 
@@ -513,7 +513,7 @@ Each module is one Claude Code session. Finish and test one before starting the 
 
 1. **Problem:** trends are hard to find, and the same variable can trend opposite ways in different places.
 2. **Tool:** a guided investigation with tested statistics, explained in plain words.
-3. **Two findings:** Florida and Punjab, one sentence each.
+3. **Two findings:** Florida and Phoenix, one sentence each.
 4. **Method rigor:** autocorrelation corrected Mann-Kendall, false discovery rate correction, POD patterns, GEV extremes.
 5. **Engineering:** tested release pipeline; only code that passes tests reaches the live app.
 6. **Honest limits:** about 55 km grid, approximate heat index, model data rather than weather station data.
