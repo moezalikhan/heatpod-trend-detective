@@ -1,0 +1,58 @@
+# Streamlit config for HeatPOD Trend Detective ("Case File" design, docs/PLAN.md Section 8).
+# Option names checked against `streamlit config show` for Streamlit 1.67.0.
+
+[server]
+# Serve files in static/ at app/static/<file name> (needed for the fonts).
+enableStaticServing = true
+
+[theme]
+base = "light"
+primaryColor = "#1F4E5F"             # deep ink teal: buttons, links, active step
+backgroundColor = "#F6F3EC"          # warm paper
+secondaryBackgroundColor = "#FBF9F4" # lighter paper: sidebar and panels
+textColor = "#1D2430"                # ink
+linkColor = "#1F4E5F"
+borderColor = "#D9D3C7"              # warm grey divider lines
+baseRadius = "none"                  # no rounded corners
+font = "plex-sans, sans-serif"
+headingFont = "source-serif, serif"
+codeFont = "plex-mono, monospace"
+
+# Body: IBM Plex Sans
+[[theme.fontFaces]]
+family = "plex-sans"
+url = "app/static/IBMPlexSans-Regular.woff2"
+weight = 400
+style = "normal"
+
+[[theme.fontFaces]]
+family = "plex-sans"
+url = "app/static/IBMPlexSans-Bold.woff2"
+weight = 700
+style = "normal"
+
+# Headings: Source Serif 4
+[[theme.fontFaces]]
+family = "source-serif"
+url = "app/static/SourceSerif4-Regular.woff2"
+weight = 400
+style = "normal"
+
+[[theme.fontFaces]]
+family = "source-serif"
+url = "app/static/SourceSerif4-Bold.woff2"
+weight = 700
+style = "normal"
+
+# Numbers, p-values, verdict labels: IBM Plex Mono
+[[theme.fontFaces]]
+family = "plex-mono"
+url = "app/static/IBMPlexMono-Regular.woff2"
+weight = 400
+style = "normal"
+
+[[theme.fontFaces]]
+family = "plex-mono"
+url = "app/static/IBMPlexMono-Bold.woff2"
+weight = 700
+style = "normal"

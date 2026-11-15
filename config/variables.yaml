@@ -1,0 +1,41 @@
+# Variables (docs/PLAN.md Section 3). Source is NASA POWER daily data.
+# "power" means the value is downloaded; "calculated" means the pipeline derives it.
+period:
+  start: 1981-01-01
+  end: 2025-12-31
+
+variables:
+  T2M:
+    name: Air temperature at 2 meters
+    unit: "°C"
+    source: power
+    definition: How warm the air is at head height
+
+  T2M_MAX:
+    name: Daily maximum temperature
+    unit: "°C"
+    source: power
+    definition: The hottest moment of each day
+
+  RH2M:
+    name: Relative humidity
+    unit: "%"
+    source: power
+    definition: How much moisture is in the air, compared with the most it can hold
+
+  PRECTOTCORR:
+    name: Precipitation
+    unit: mm/day
+    source: power
+    definition: Rain and snow, in millimeters per day
+
+  HEAT_INDEX:
+    name: Heat index
+    unit: "°C"
+    source: calculated
+    inputs: [T2M_MAX, RH2M]
+    method: NOAA heat index formula
+    definition: Temperature and humidity combined into "feels like" heat
+    limitation: >-
+      Combines the daily maximum temperature with daily average humidity,
+      so it is an approximation.

@@ -1,0 +1,62 @@
+# Release: after both test jobs pass on main, copy main to the live branch.
+# Streamlit Community Cloud watches live, so a broken push never reaches the app.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write  # needed to push to the live branch
+
+# One release at a time; a newer push cancels an older run in progress.
+concurrency:
+  group: release
+  cancel-in-progress: true
+
+jobs:
+  test-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pipeline/requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r pipeline/requirements.txt
+      - name: Pipeline tests
+        run: pytest pipeline/tests
+
+  test-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            pipeline/requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt -r pipeline/requirements.txt
+      - name: App tests (Streamlit AppTest)
+        run: pytest tests
+
+  release:
+    needs: [test-pipeline, test-app]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # full history, so live can be updated from main
+      - name: Push main to live
+        run: |
+          # Fetch live (if it exists) so --force-with-lease has a ref to compare against.
+          git fetch origin live:refs/remotes/origin/live || true
+          git push origin HEAD:live --force-with-lease

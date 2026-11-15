@@ -1,0 +1,8 @@
+# App only. Streamlit Community Cloud installs this file, so keep it short.
+# Heavy science tools live in pipeline/requirements.txt.
+streamlit>=1.45
+altair>=5.5
+pandas>=2.2
+numpy>=2.0
+pyarrow>=18.0
+pyyaml>=6.0

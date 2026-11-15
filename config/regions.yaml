@@ -1,0 +1,36 @@
+# Study regions (docs/PLAN.md Section 3).
+# Boxes are in degrees: latitude south to north, longitude west to east.
+# NASA POWER regional requests allow at most about 4.5 x 4.5 degrees,
+# so each box is split into 2 x 2 tiles of equal size.
+max_tile_degrees: 4.5
+
+regions:
+  florida:
+    name: Florida
+    climate: humid heat
+    box:
+      lat_min: 24.5
+      lat_max: 31.0
+      lon_min: -87.6
+      lon_max: -80.0
+    land_mask: true   # the box contains a lot of sea
+    tiles:
+      - {lat_min: 24.5,  lat_max: 27.75, lon_min: -87.6, lon_max: -83.8}
+      - {lat_min: 24.5,  lat_max: 27.75, lon_min: -83.8, lon_max: -80.0}
+      - {lat_min: 27.75, lat_max: 31.0,  lon_min: -87.6, lon_max: -83.8}
+      - {lat_min: 27.75, lat_max: 31.0,  lon_min: -83.8, lon_max: -80.0}
+
+  punjab:
+    name: Punjab, Pakistan
+    climate: dry heat
+    box:
+      lat_min: 28.0
+      lat_max: 34.0
+      lon_min: 69.5
+      lon_max: 75.5
+    land_mask: true
+    tiles:
+      - {lat_min: 28.0, lat_max: 31.0, lon_min: 69.5, lon_max: 72.5}
+      - {lat_min: 28.0, lat_max: 31.0, lon_min: 72.5, lon_max: 75.5}
+      - {lat_min: 31.0, lat_max: 34.0, lon_min: 69.5, lon_max: 72.5}
+      - {lat_min: 31.0, lat_max: 34.0, lon_min: 72.5, lon_max: 75.5}

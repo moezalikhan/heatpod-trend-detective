@@ -1,0 +1,52 @@
+/* HeatPOD Trend Detective: "Case File" styles (docs/PLAN.md Section 8).
+   Only for what .streamlit/config.toml cannot do. Flat: no gradients, no shadows. */
+
+:root {
+  --ink: #1D2430;
+  --slate: #5B6472;
+  --rule: #D9D3C7;
+  --accent: #1F4E5F;
+  --muted: #BDBAB3;
+}
+
+/* Verdict box: flat 1.5 px ink border, square corners, mono capital label. */
+.verdict {
+  border: 1.5px solid var(--ink);
+  border-radius: 0;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  background: transparent;
+}
+.verdict-label {
+  font-family: "plex-mono", monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+/* Thin divider lines between sections. */
+hr, .rule {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 1.5rem 0;
+}
+
+/* Secondary text in mono, for numbers and small labels. */
+.mono { font-family: "plex-mono", monospace; }
+.subtle { color: var(--slate); }
+
+/* Remove shadows and rounded corners from containers. */
+[data-testid="stLayoutWrapper"],
+[data-testid="stExpander"],
+[data-testid="stSidebar"] {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* Hide the default Streamlit menu and deploy button. */
+[data-testid="stMainMenu"],
+[data-testid="stAppDeployButton"] {
+  display: none !important;
+}
+footer { visibility: hidden; }

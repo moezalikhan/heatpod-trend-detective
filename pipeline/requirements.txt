@@ -1,0 +1,8 @@
+# Science tools for the laptop pipeline (not installed on Community Cloud).
+xarray>=2024.10
+netCDF4>=1.7
+scipy>=1.14
+pymannkendall>=1.4.3
+regionmask>=0.13
+httpx>=0.28
+pytest>=8.3
