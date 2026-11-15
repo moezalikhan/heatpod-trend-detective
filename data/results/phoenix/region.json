@@ -15,5 +15,27 @@
     "RH2M",
     "PRECTOTCORR",
     "HEAT_INDEX"
+  ],
+  "places": [
+    {
+      "name": "Phoenix",
+      "lat": 33.45,
+      "lon": -112.07
+    },
+    {
+      "name": "Tucson",
+      "lat": 32.22,
+      "lon": -110.97
+    },
+    {
+      "name": "Flagstaff",
+      "lat": 35.2,
+      "lon": -111.65
+    },
+    {
+      "name": "Yuma",
+      "lat": 32.69,
+      "lon": -114.62
+    }
   ]
 }

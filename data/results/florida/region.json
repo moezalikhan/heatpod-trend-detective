@@ -15,5 +15,27 @@
     "RH2M",
     "PRECTOTCORR",
     "HEAT_INDEX"
+  ],
+  "places": [
+    {
+      "name": "Tallahassee",
+      "lat": 30.44,
+      "lon": -84.28
+    },
+    {
+      "name": "Orlando",
+      "lat": 28.54,
+      "lon": -81.38
+    },
+    {
+      "name": "Tampa",
+      "lat": 27.95,
+      "lon": -82.46
+    },
+    {
+      "name": "Miami",
+      "lat": 25.76,
+      "lon": -80.19
+    }
   ]
 }

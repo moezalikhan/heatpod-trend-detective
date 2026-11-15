@@ -1,0 +1,125 @@
+# Plain-language margin notes (Module 10). Written for high school students.
+# Each step of the investigation shows the notes listed under `steps`.
+
+terms:
+  anomaly:
+    title: What is an anomaly?
+    text: >-
+      The difference from normal. We take each month and subtract the average
+      for that calendar month in 1991 to 2020. A July that is 0.5 °C warmer than
+      an average July has an anomaly of +0.5 °C. This removes summer and winter,
+      so only the slow change is left.
+
+  trend:
+    title: What is a trend?
+    text: >-
+      The steady rise or fall underneath the ups and downs. We fit a straight
+      line through 45 years of anomalies and report how much it goes up or down
+      every 10 years (per decade).
+
+  p_value:
+    title: What is a p-value?
+    text: >-
+      How surprising the data would be if there were really no trend. A p-value
+      of 0.002 means: if nothing were changing, data this extreme would show up
+      only about 2 times in 1000. Small p-values mean the trend is unlikely to be
+      chance.
+
+  significance:
+    title: What does "significant" mean?
+    text: >-
+      We call a trend SIGNIFICANT when its p-value is below 0.05, so it would
+      happen by chance less than 1 time in 20. NOT SIGNIFICANT does not prove
+      there is no change. It means the data are too noisy to be sure.
+
+  mann_kendall:
+    title: What is the Mann-Kendall test?
+    text: >-
+      A test that checks whether later values tend to be higher (or lower) than
+      earlier ones, without assuming a straight line. Months are linked (a warm
+      month is often followed by another), which can fool the basic test, so we
+      use a version that corrects for this (Hamed and Rao).
+
+  confidence_interval:
+    title: What is the 95% range?
+    text: >-
+      The range of trend sizes that fit the data well. If we could repeat the
+      45 years many times, this range would contain the true trend 95 times out
+      of 100. The shaded band on the chart shows it.
+
+  sens_slope:
+    title: What is Sen's slope?
+    text: >-
+      A second way to measure the trend size: the middle value of the slopes
+      between every pair of months. One very odd month barely changes it, so it
+      checks that a single outlier is not driving the result.
+
+  grid_cell:
+    title: What is a grid cell?
+    text: >-
+      NASA's data come as squares of about 55 km by 55 km (0.5 by 0.625
+      degrees). Each square has one value per day. A region is a group of these
+      squares.
+
+  land_mask:
+    title: Why remove the sea?
+    text: >-
+      Squares over the ocean behave differently from land, and people live on
+      land. We keep only squares whose center is on land (Natural Earth map).
+
+  false_discovery_rate:
+    title: Why are some squares grey?
+    text: >-
+      When you test 50 squares, about 2 or 3 look "significant" by pure luck.
+      The false discovery rate correction (Benjamini-Hochberg) raises the bar so
+      those lucky hits are removed. Grey squares did not pass the corrected test.
+
+  pod:
+    title: What is POD?
+    text: >-
+      Proper Orthogonal Decomposition breaks the map's ups and downs into a few
+      fixed patterns. Each pattern has a map (where it is strong) and a time
+      series (when it is strong). The first pattern explains the most.
+
+  mode:
+    title: How to read a pattern
+    text: >-
+      Squares of the same color move together. If one part of the map is red and
+      another blue, those parts move in opposite directions. The percentage tells
+      how much of all the variation this one pattern explains.
+
+  return_level:
+    title: What is a 20-year level?
+    text: >-
+      A value so high that, on average, it is reached only once every 20 years.
+      If the same level is now reached every 5 years, extremes have become 4
+      times as common.
+
+  gev:
+    title: How do we estimate rare events?
+    text: >-
+      We take the hottest (or wettest) day of each year and fit a curve made for
+      extremes, the Generalized Extreme Value (GEV) distribution. We fit 1981 to
+      2003 and 2004 to 2025 separately and compare them.
+
+  bootstrap:
+    title: Where does the range come from?
+    text: >-
+      We pick years at random from the real ones (some twice, some not at all),
+      refit, and repeat 1000 times. The middle 95% of the answers is the likely
+      range. With only about 22 years per period, the ranges are wide.
+
+  heat_index:
+    title: About the heat index
+    text: >-
+      Heat index is how hot it feels when humidity stops sweat from cooling you.
+      NASA gives the day's highest temperature and the day's average humidity, and
+      afternoons are drier than average, so our values run high. Trends are still
+      meaningful.
+
+steps:
+  what: [anomaly, heat_index]
+  where: [grid_cell, land_mask]
+  evidence: [trend, p_value, significance, mann_kendall, confidence_interval, sens_slope]
+  patterns: [false_discovery_rate, pod, mode]
+  extremes: [return_level, gev, bootstrap]

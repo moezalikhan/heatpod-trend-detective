@@ -7,34 +7,71 @@
   --rule: #D9D3C7;
   --accent: #1F4E5F;
   --muted: #BDBAB3;
+  --panel: #FBF9F4;
 }
 
-/* Verdict box: flat 1.5 px ink border, square corners, mono capital label. */
+.mono { font-family: "plex-mono", monospace; }
+.small { font-size: 0.85rem; color: var(--slate); }
+
+/* Small capital labels, like the tabs of a paper file. */
+.case-label {
+  font-family: "plex-mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--slate);
+  margin-bottom: 0.25rem;
+}
+.case-line { font-size: 1rem; color: var(--ink); margin: -0.5rem 0 0.75rem 0; }
+
+/* Verdict box: flat 1.5 px ink border, square corners, stamp-style mono label. */
 .verdict {
   border: 1.5px solid var(--ink);
   border-radius: 0;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
   margin: 1rem 0;
-  background: transparent;
+  background: var(--panel);
 }
 .verdict-label {
+  display: inline-block;
   font-family: "plex-mono", monospace;
   font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--ink);
+  border: 1.5px solid var(--ink);
+  padding: 0.1rem 0.5rem;
+  margin-bottom: 0.6rem;
 }
+.verdict-muted .verdict-label { color: var(--slate); border-color: var(--slate); }
+.verdict-headline { font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+.verdict-detail { font-size: 0.85rem; color: var(--slate); }
+.verdict-sentence { margin: 0.75rem 0 0 0; color: var(--ink); }
+.verdict-caution {
+  margin-top: 0.6rem; padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem; color: var(--slate);
+}
+
+/* A finding sentence under a chart. */
+.finding { border-left: 1.5px solid var(--ink); padding-left: 0.75rem; }
+
+/* Margin notes: thin left rule, small text. */
+.note { border-left: 1px solid var(--rule); padding: 0 0 0 0.75rem; margin: 0 0 1.25rem 0; }
+.note-title { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+.note p { font-size: 0.85rem; color: var(--slate); margin: 0.25rem 0 0 0; }
+
+/* Demo bar. */
+.demo-bar { border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--rule); padding: 0.5rem 0; margin: 0.5rem 0; }
+.demo-bar p { margin: 0.25rem 0 0 0; }
+
+/* Plain table. */
+table.plain { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+table.plain th { text-align: left; font-weight: 400; color: var(--slate); border-bottom: 1px solid var(--ink); padding: 0.3rem 0.5rem 0.3rem 0; }
+table.plain td { border-bottom: 1px solid var(--rule); padding: 0.4rem 0.5rem 0.4rem 0; vertical-align: top; }
 
 /* Thin divider lines between sections. */
-hr, .rule {
-  border: 0;
-  border-top: 1px solid var(--rule);
-  margin: 1.5rem 0;
-}
-
-/* Secondary text in mono, for numbers and small labels. */
-.mono { font-family: "plex-mono", monospace; }
-.subtle { color: var(--slate); }
+hr, .rule { border: 0; border-top: 1px solid var(--rule); margin: 1.5rem 0; }
 
 /* Remove shadows and rounded corners from containers. */
 [data-testid="stLayoutWrapper"],
