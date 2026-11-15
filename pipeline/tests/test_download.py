@@ -162,3 +162,32 @@ def test_merge_variable_joins_years_and_tiles(tmp_path):
     da = dl.merge_variable(region, "T2M", start, end, tmp_path)
     assert dict(da.sizes) == {"time": 4, "lat": 2, "lon": 4}
     assert dl.find_gaps(da, start, end) == []
+
+
+def test_slow_trickling_response_is_cut_off():
+    # The server keeps sending small pieces; each piece "takes" 100 seconds.
+    now = [0.0]
+
+    def clock():
+        now[0] += 100.0
+        return now[0]
+
+    client = httpx.Client(transport=httpx.MockTransport(
+        lambda r: httpx.Response(200, content=iter([b"a"] * 10))))
+    with pytest.raises(httpx.ReadTimeout):
+        dl.get_with_deadline(client, {}, deadline=180.0, clock=clock)
+
+
+def test_fetch_retries_after_a_timeout(tmp_path):
+    body = netcdf_bytes(tmp_path, fake_grid([24.5], [-87.5]))
+    calls = []
+
+    def handler(request):
+        calls.append(request)
+        if len(calls) == 1:
+            raise httpx.ReadTimeout("stalled", request=request)
+        return httpx.Response(200, content=body)
+
+    client = httpx.Client(transport=httpx.MockTransport(handler))
+    assert dl.fetch(make_request(), client, NoWait(), tmp_path / "raw", sleep=lambda s: None)
+    assert len(calls) == 2

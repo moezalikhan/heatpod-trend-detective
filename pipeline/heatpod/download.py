@@ -44,6 +44,7 @@ TIME_STANDARD = "lst"       # local solar time, so "daily max" means the local d
 MAX_DAYS_PER_REQUEST = 366
 MIN_SECONDS_BETWEEN_REQUESTS = 2.5  # 24 per minute, safely under the 30 limit
 MAX_RETRIES = 5
+REQUEST_DEADLINE_SECONDS = 180.0  # a slow server that trickles bytes is cut off here
 RETRY_STATUSES = {429, 500, 502, 503, 504}
 FILL_VALUE = -999.0         # POWER's missing-data marker
 
@@ -142,6 +143,24 @@ def is_valid_netcdf(path: Path) -> bool:
         return False
 
 
+def get_with_deadline(client: httpx.Client, params: dict[str, str],
+                      deadline: float = REQUEST_DEADLINE_SECONDS,
+                      clock: Callable[[], float] = time.monotonic) -> tuple[int, bytes]:
+    """GET the API with a limit on the total time, not only the gap between bytes.
+
+    The httpx read timeout only fires when no bytes arrive at all, so a connection
+    that keeps sending tiny pieces could hang forever (seen on 2026-11-15).
+    """
+    started = clock()
+    chunks = []
+    with client.stream("GET", API_URL, params=params) as resp:
+        for chunk in resp.iter_bytes():
+            chunks.append(chunk)
+            if clock() - started > deadline:
+                raise httpx.ReadTimeout(f"request took longer than {deadline:.0f}s")
+        return resp.status_code, b"".join(chunks)
+
+
 def fetch(req: Request, client: httpx.Client, limiter: RateLimiter,
           raw_dir: Path = RAW_DIR, sleep: Callable[[float], None] = time.sleep) -> bool:
     """Download one request into the cache. Returns False if it was already cached."""
@@ -154,18 +173,18 @@ def fetch(req: Request, client: httpx.Client, limiter: RateLimiter,
     for attempt in range(1, MAX_RETRIES + 1):
         limiter.wait()
         try:
-            resp = client.get(API_URL, params=req.params())
+            status, body = get_with_deadline(client, req.params())
         except httpx.TransportError as exc:      # timeouts, dropped connections
             last_error = repr(exc)
         else:
-            if resp.status_code == 200 and resp.content.startswith(HDF5_SIGNATURE):
+            if status == 200 and body.startswith(HDF5_SIGNATURE):
                 # Write to a temporary file first, so a crash never leaves a half file.
                 tmp = path.with_suffix(".part")
-                tmp.write_bytes(resp.content)
+                tmp.write_bytes(body)
                 tmp.replace(path)
                 return True
-            last_error = f"HTTP {resp.status_code}: {resp.text[:300]}"
-            if resp.status_code not in RETRY_STATUSES and resp.status_code != 200:
+            last_error = f"HTTP {status}: {body[:300].decode('utf-8', 'replace')}"
+            if status not in RETRY_STATUSES and status != 200:
                 # A bad request will not get better by retrying.
                 raise DownloadError(f"{req.path(raw_dir).name}: {last_error}")
         backoff = min(60.0, 2.0 ** attempt)
@@ -263,7 +282,7 @@ def main(argv: list[str] | None = None) -> int:
     start, end = catalog.start, catalog.end
     limiter = RateLimiter(MIN_SECONDS_BETWEEN_REQUESTS)
     failed = []
-    with httpx.Client(timeout=httpx.Timeout(120.0, connect=20.0)) as client:
+    with httpx.Client(timeout=httpx.Timeout(60.0, connect=20.0)) as client:
         for key in args.region or sorted(regions):
             for code in args.variable or catalog.power_codes():
                 region = regions[key]
