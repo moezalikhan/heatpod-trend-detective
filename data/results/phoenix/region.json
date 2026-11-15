@@ -2,20 +2,6 @@
   "key": "phoenix",
   "name": "Phoenix, Arizona",
   "climate": "dry heat",
-  "box": {
-    "lat_min": 31.5,
-    "lat_max": 35.5,
-    "lon_min": -114.5,
-    "lon_max": -110.0
-  },
-  "n_land_cells": 70,
-  "variables": [
-    "T2M",
-    "T2M_MAX",
-    "RH2M",
-    "PRECTOTCORR",
-    "HEAT_INDEX"
-  ],
   "places": [
     {
       "name": "Phoenix",
@@ -37,5 +23,19 @@
       "lat": 32.69,
       "lon": -114.62
     }
+  ],
+  "box": {
+    "lat_min": 31.5,
+    "lat_max": 35.5,
+    "lon_min": -114.5,
+    "lon_max": -110.0
+  },
+  "n_land_cells": 70,
+  "variables": [
+    "T2M",
+    "T2M_MAX",
+    "RH2M",
+    "PRECTOTCORR",
+    "HEAT_INDEX"
   ]
 }

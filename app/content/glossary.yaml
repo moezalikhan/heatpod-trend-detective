@@ -88,6 +88,14 @@ terms:
       another blue, those parts move in opposite directions. The percentage tells
       how much of all the variation this one pattern explains.
 
+  yearly_max_trend:
+    title: Two ways to look at extremes
+    text: >-
+      First we take the most extreme day of every year (45 values) and test
+      whether they trend up or down, like the Evidence step. Second we compare
+      how often a rare 20-year level is reached in 1981-2003 and in 2004-2025.
+      The first uses all years at once, so it can find smaller changes.
+
   return_level:
     title: What is a 20-year level?
     text: >-
@@ -122,4 +130,4 @@ steps:
   where: [grid_cell, land_mask]
   evidence: [trend, p_value, significance, mann_kendall, confidence_interval, sens_slope]
   patterns: [false_discovery_rate, pod, mode]
-  extremes: [return_level, gev, bootstrap]
+  extremes: [yearly_max_trend, return_level, gev, bootstrap]

@@ -54,6 +54,17 @@ variable_files:
         - shape_at_bound
         - periods
         - return_period
+        - max_trend.slope_per_decade
+        - max_trend.ci_low
+        - max_trend.ci_high
+        - max_trend.sen_slope_per_decade
+        - max_trend.p_value
+        - max_trend.significant
+        - max_trend.verdict
+        - max_trend.sentence
+        - max_trend_cells.n_land
+        - max_trend_cells.rising
+        - max_trend_cells.falling
 
   series_monthly.parquet:
     type: parquet
@@ -85,6 +96,8 @@ variable_files:
       extreme_level_new: float
       extreme_change: float
       extreme_period_new: float
+      max_trend_slope: float
+      max_trend_significant: bool
 
   pod_series.parquet:
     type: parquet

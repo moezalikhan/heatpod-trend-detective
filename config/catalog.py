@@ -34,6 +34,7 @@ class Variable:
     extremes: bool = False          # fit extreme value statistics (Module 6)
     extremes_show_level: bool = True  # False: show only how often, not the level
     extremes_note: str | None = None
+    yearly_max_name: str | None = None   # e.g. "The hottest day of the year"
 
     @property
     def is_calculated(self) -> bool:

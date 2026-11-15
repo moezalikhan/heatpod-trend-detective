@@ -79,6 +79,27 @@
     "sentence": "The heat index level that used to be reached about once every 20 years is now reached about once every 51 years (likely range 5 to more than 1000 years), but this change could be chance.",
     "show_level": false,
     "shape_at_bound": false,
+    "max_trend": {
+      "slope_per_decade": 0.510489,
+      "ci_low": -0.233469,
+      "ci_high": 1.254446,
+      "sen_slope_per_decade": 0.55701,
+      "p_value": 0.193242,
+      "significant": false,
+      "n": 45,
+      "n_eff": 45.0,
+      "verdict": "NOT SIGNIFICANT",
+      "sentence": "The highest heat index of the year has changed by +0.51 °C per decade since 1981, but this could easily be chance (p = 0.193). The data do not show a clear trend.",
+      "subject": "The highest heat index of the year",
+      "test": "Mann-Kendall (Hamed-Rao, 3 lags) and 95% range must agree",
+      "data": "yearly maximums"
+    },
+    "max_trend_cells": {
+      "n_land": 53,
+      "rising": 20,
+      "falling": 0,
+      "opposite": false
+    },
     "note": "Heat index extremes here run several degrees too high, because the daily maximum temperature is combined with the day's average humidity (afternoons are drier). So we show how much more often extremes happen, not their exact level.",
     "periods": [
       [

@@ -157,3 +157,58 @@ def test_sentence_for_no_clear_trend_uses_plain_units():
     s = trends.sentence(var, make_result(-0.12, 0.31), 1981)
     assert "percentage points" in s and "could easily be chance (p = 0.310)" in s
     assert trends.verdict_label(make_result(-0.12, 0.31)) == "NOT SIGNIFICANT"
+
+
+# --- yearly maximums (Extremes step) -----------------------------------------
+
+YEARS = np.arange(1981, 2026)
+
+
+def yearly(values):
+    return xr.DataArray(values, dims="year", coords={"year": YEARS})
+
+
+def test_known_trend_in_yearly_maximums_is_detected():
+    rng = np.random.default_rng(11)
+    r = trends.yearly_trend(yearly(38 + 0.04 * (YEARS - 1981) + rng.normal(0, 0.5, 45)))
+    assert r.significant
+    assert r.slope_per_decade == pytest.approx(0.4, abs=0.15)
+    assert r.sen_slope_per_decade == pytest.approx(0.4, abs=0.15)
+
+
+def test_noise_in_yearly_maximums_is_rarely_significant():
+    rng = np.random.default_rng(12)
+    hits = sum(trends.yearly_trend(yearly(38 + rng.normal(0, 1, 45))).significant for _ in range(400))
+    assert hits / 400 <= 0.07   # about 3 to 4% expected
+
+
+def test_linked_years_do_not_inflate_false_alarms():
+    rng = np.random.default_rng(13)
+    hits = sum(trends.yearly_trend(yearly(ar1(45, 0.5, 1.0, rng))).significant for _ in range(400))
+    assert hits / 400 <= 0.10   # the 95% range check keeps this near 6%
+
+
+def test_yearly_cell_trends_find_the_trending_cells():
+    rng = np.random.default_rng(14)
+    data = rng.normal(0, 0.5, (45, 2, 2))
+    data[:, 0, :] += 0.06 * (YEARS - 1981)[:, None]           # top row trends
+    da = xr.DataArray(data, dims=("year", "lat", "lon"),
+                      coords={"year": YEARS, "lat": [0.0, 1.0], "lon": [0.0, 1.0]})
+    mask = xr.ones_like(da.isel(year=0), dtype=bool).drop_vars("year")
+    cells = trends.cell_trends(da, mask, fn=trends.yearly_trend)
+    assert cells["significant"].values.tolist() == [[True, True], [False, False]]
+
+
+def test_borderline_sentence_does_not_say_easily_chance():
+    var = load_catalog()["T2M_MAX"]
+    r = trends.TrendResult(0.30, -0.004, 0.59, 0.28, 0.032, False, 45, 45.0)
+    s = trends.sentence(var, r, 1981, subject=var.yearly_max_name)
+    assert "borderline (p = 0.032)" in s and "easily" not in s
+
+
+def test_sentence_with_a_subject():
+    var = load_catalog()["T2M_MAX"]
+    r = trends.TrendResult(0.31, 0.1, 0.5, 0.3, 0.004, True, 45, 45.0)
+    assert trends.sentence(var, r, 1981, subject=var.yearly_max_name) == (
+        "The hottest day of the year has risen by 0.31 °C per decade since 1981. "
+        "This trend is very unlikely to be chance (p = 0.004).")

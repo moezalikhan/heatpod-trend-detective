@@ -79,6 +79,27 @@
     "sentence": "The precipitation level that used to be reached about once every 20 years (29.2 mm/day) is now reached about once every 10 years (likely range 3 to 40 years), but this change could be chance.",
     "show_level": true,
     "shape_at_bound": false,
+    "max_trend": {
+      "slope_per_decade": -0.079406,
+      "ci_low": -1.894832,
+      "ci_high": 1.73602,
+      "sen_slope_per_decade": -0.499777,
+      "p_value": 0.428146,
+      "significant": false,
+      "n": 45,
+      "n_eff": 44.476847,
+      "verdict": "NOT SIGNIFICANT",
+      "sentence": "The wettest day of the year has changed by -0.08 mm/day per decade since 1981, but this could easily be chance (p = 0.428). The data do not show a clear trend.",
+      "subject": "The wettest day of the year",
+      "test": "Mann-Kendall (Hamed-Rao, 3 lags) and 95% range must agree",
+      "data": "yearly maximums"
+    },
+    "max_trend_cells": {
+      "n_land": 70,
+      "rising": 0,
+      "falling": 0,
+      "opposite": false
+    },
     "note": null,
     "periods": [
       [

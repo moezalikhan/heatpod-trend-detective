@@ -2,20 +2,6 @@
   "key": "florida",
   "name": "Florida",
   "climate": "humid heat",
-  "box": {
-    "lat_min": 24.5,
-    "lat_max": 31.0,
-    "lon_min": -87.6,
-    "lon_max": -80.0
-  },
-  "n_land_cells": 53,
-  "variables": [
-    "T2M",
-    "T2M_MAX",
-    "RH2M",
-    "PRECTOTCORR",
-    "HEAT_INDEX"
-  ],
   "places": [
     {
       "name": "Tallahassee",
@@ -37,5 +23,19 @@
       "lat": 25.76,
       "lon": -80.19
     }
+  ],
+  "box": {
+    "lat_min": 24.5,
+    "lat_max": 31.0,
+    "lon_min": -87.6,
+    "lon_max": -80.0
+  },
+  "n_land_cells": 53,
+  "variables": [
+    "T2M",
+    "T2M_MAX",
+    "RH2M",
+    "PRECTOTCORR",
+    "HEAT_INDEX"
   ]
 }

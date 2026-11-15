@@ -79,6 +79,27 @@
     "sentence": "The daily maximum temperature level that used to be reached about once every 20 years (43.6 °C) is now reached about once every 11 years (likely range 3 to more than 1000 years), but this change could be chance.",
     "show_level": true,
     "shape_at_bound": false,
+    "max_trend": {
+      "slope_per_decade": 0.295988,
+      "ci_low": -0.000125,
+      "ci_high": 0.592101,
+      "sen_slope_per_decade": 0.280055,
+      "p_value": 0.032167,
+      "significant": false,
+      "n": 45,
+      "n_eff": 45.0,
+      "verdict": "NOT SIGNIFICANT",
+      "sentence": "The hottest day of the year has changed by +0.30 °C per decade since 1981. The evidence is borderline (p = 0.032), but the 95% range still includes no change, so we do not call it a clear trend.",
+      "subject": "The hottest day of the year",
+      "test": "Mann-Kendall (Hamed-Rao, 3 lags) and 95% range must agree",
+      "data": "yearly maximums"
+    },
+    "max_trend_cells": {
+      "n_land": 70,
+      "rising": 47,
+      "falling": 0,
+      "opposite": false
+    },
     "note": null,
     "periods": [
       [

@@ -182,7 +182,10 @@ def pod_series(series: pd.DataFrame) -> alt.LayerChart:
 # ---------------------------------------------------------------------------
 
 def yearly_maxima(annual: pd.DataFrame, ext: dict, unit: str, show_level: bool) -> alt.LayerChart:
-    """Each year's maximum, colored by period. Levels are drawn only when reliable."""
+    """Each year's maximum, colored by period, with its trend line.
+
+    The 20-year levels are drawn only when reliable (not for heat index).
+    """
     (a0, a1), (b0, b1) = ext["periods"]
     df = annual.copy()
     df["period"] = np.where(df["year"] <= a1, f"{a0}-{a1}", f"{b0}-{b1}")
@@ -192,15 +195,25 @@ def yearly_maxima(annual: pd.DataFrame, ext: dict, unit: str, show_level: bool) 
     else:
         # Differences from the first period's average maximum (absolute values not reliable).
         df["y"] = df["max"] - df.loc[df["year"] <= a1, "max"].mean()
-        y_title = f"Hottest day vs {a0}-{a1} average ({unit})"
+        y_title = f"Yearly maximum vs {a0}-{a1} average ({unit})"
     period_scale = alt.Scale(domain=[f"{a0}-{a1}", f"{b0}-{b1}"], range=[PERIOD_OLD, PERIOD_NEW])
     color = alt.Color("period:N", scale=period_scale, legend=alt.Legend(title=None))
-    bars = alt.Chart(df).mark_point(filled=True, size=55, opacity=1).encode(
-        x=alt.X("year:O", title=None, axis=alt.Axis(values=[1981, 1990, 2000, 2010, 2020, 2025], labelAngle=0)),
-        y=alt.Y("y:Q", title=y_title, scale=alt.Scale(zero=False)),
-        color=color,
-        tooltip=[alt.Tooltip("year:O", title="Year"), alt.Tooltip("y:Q", title=y_title, format=".2f")])
-    layers = [bars]
+    x = alt.X("year:Q", title=None, scale=alt.Scale(domain=[1980, 2026], nice=False),
+              axis=alt.Axis(values=list(range(1985, 2026, 5)), format="d", labelAngle=0))
+    dots = alt.Chart(df).mark_point(filled=True, size=55, opacity=1).encode(
+        x=x, y=alt.Y("y:Q", title=y_title, scale=alt.Scale(zero=False)), color=color,
+        tooltip=[alt.Tooltip("year:Q", title="Year", format="d"),
+                 alt.Tooltip("y:Q", title=y_title, format=".2f")])
+    layers = [dots]
+    mt = ext.get("max_trend")
+    if mt:
+        # Least-squares line through the means, with the slope from the yearly trend test.
+        line = df[["year"]].copy()
+        line["fit"] = df["y"].mean() + mt["slope_per_decade"] / 10 * (df["year"] - df["year"].mean())
+        color_line = GREY if not mt["significant"] else (UP if mt["slope_per_decade"] > 0 else DOWN)
+        layers.append(alt.Chart(line).mark_line(
+            color=color_line, strokeWidth=2.5,
+            strokeDash=[] if mt["significant"] else [6, 4]).encode(x="year:Q", y="fit:Q"))
     if show_level and ext.get("level_old") is not None:
         levels = pd.DataFrame({
             "y": [ext["level_old"], ext["level_new"]],

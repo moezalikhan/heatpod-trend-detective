@@ -39,6 +39,7 @@ RAW_DIR = ROOT / "data" / "raw"
 ALPHA = 0.05            # significance level
 MONTHS_PER_DECADE = 120
 MK_LAGS = 12            # one year of monthly autocorrelation in the Hamed-Rao correction
+YEARLY_MK_LAGS = 3      # yearly series have only 45 values (Hamed and Rao's own suggestion)
 
 
 @dataclass(frozen=True)
@@ -83,7 +84,7 @@ def linear_trend(y: np.ndarray, t_years: np.ndarray) -> tuple[float, float, floa
     return fit.slope * 10, (fit.slope - half) * 10, (fit.slope + half) * 10, n_eff
 
 
-def mann_kendall(y: np.ndarray) -> tuple[float, float]:
+def mann_kendall(y: np.ndarray, lags: int = MK_LAGS) -> tuple[float, float]:
     """Autocorrelation-corrected Mann-Kendall test.
 
     Returns (p_value, Sen's slope per time step).
@@ -91,7 +92,8 @@ def mann_kendall(y: np.ndarray) -> tuple[float, float]:
     autocorrelation is negative by chance, which makes the test too eager.
     We never let it go below the basic test's variance.
     """
-    r = mk.hamed_rao_modification_test(y, alpha=ALPHA, lag=MK_LAGS)
+    with np.errstate(invalid="ignore"):   # pymannkendall's own p can hit sqrt(<0); we recompute it
+        r = mk.hamed_rao_modification_test(y, alpha=ALPHA, lag=lags)
     n = len(y)
     var_basic = n * (n - 1) * (2 * n + 5) / 18
     var_s = float(r.var_s)
@@ -115,6 +117,28 @@ def trend(series: xr.DataArray) -> TrendResult:
     )
 
 
+def yearly_trend(series: xr.DataArray) -> TrendResult:
+    """Trend of a yearly series (dimension 'year'), for example each year's maximum.
+
+    Same corrected Mann-Kendall test, with 3 lags because there are only 45 values.
+    With so few values the correction is weak (simulation: about 10% false alarms
+    when years are linked at 0.3), so a trend is SIGNIFICANT only when the test AND
+    the autocorrelation-widened 95% range agree (simulation: 3 to 7% false alarms,
+    89% of real trends found). Real yearly maxima here are not linked (lag-1
+    autocorrelation -0.22 to +0.01).
+    """
+    s = series.dropna("year")
+    y = s.values.astype(float)
+    slope, lo, hi, n_eff = linear_trend(y, s["year"].values.astype(float))
+    p, sen = mann_kendall(y, YEARLY_MK_LAGS)
+    ci_agrees = lo > 0 or hi < 0
+    return TrendResult(
+        slope_per_decade=float(slope), ci_low=float(lo), ci_high=float(hi),
+        sen_slope_per_decade=sen * 10, p_value=p,
+        significant=bool(p < ALPHA and ci_agrees), n=len(y), n_eff=float(n_eff),
+    )
+
+
 # ---------------------------------------------------------------------------
 # Every grid cell, with false discovery rate control
 # ---------------------------------------------------------------------------
@@ -128,21 +152,27 @@ def fdr_qvalues(p: np.ndarray) -> np.ndarray:
     return q
 
 
-def cell_trends(grid: xr.DataArray, mask: xr.DataArray) -> xr.Dataset:
-    """Trend in every land cell. 'significant' uses the FDR-corrected q-value."""
+def cell_trends(grid: xr.DataArray, mask: xr.DataArray, fn=trend) -> xr.Dataset:
+    """Trend in every land cell. 'significant' uses the FDR-corrected q-value.
+
+    `fn` is `trend` for monthly anomalies or `yearly_trend` for yearly maxima;
+    for yearly maxima the 95% range must also exclude zero (see yearly_trend).
+    """
     names = ("slope_per_decade", "ci_low", "ci_high", "sen_slope_per_decade", "p_value")
     out = {k: xr.full_like(mask, np.nan, dtype=float) for k in names}
     for i in range(mask.sizes["lat"]):
         for j in range(mask.sizes["lon"]):
             if not bool(mask[i, j]):
                 continue
-            r = trend(grid.isel(lat=i, lon=j))
+            r = fn(grid.isel(lat=i, lon=j))
             for k in names:
                 out[k][i, j] = getattr(r, k)
     ds = xr.Dataset(out)
     q = fdr_qvalues(ds["p_value"].values.ravel()).reshape(ds["p_value"].shape)
     ds["q_value"] = (ds["p_value"].dims, q)
     ds["significant"] = (ds["q_value"] < ALPHA) & mask
+    if fn is yearly_trend:
+        ds["significant"] = ds["significant"] & ((ds["ci_low"] > 0) | (ds["ci_high"] < 0))
     ds.attrs.update(test="Mann-Kendall (Hamed-Rao)", fdr="Benjamini-Hochberg", alpha=ALPHA)
     return ds
 
@@ -164,17 +194,27 @@ def verdict_label(result: TrendResult) -> str:
     return "SIGNIFICANT" if result.significant else "NOT SIGNIFICANT"
 
 
-def sentence(var: Variable, result: TrendResult, start_year: int) -> str:
-    """One or two plain sentences a high school student can read."""
+def sentence(var: Variable, result: TrendResult, start_year: int, subject: str | None = None) -> str:
+    """One or two plain sentences a high school student can read.
+
+    `subject` replaces the variable name, for example "The hottest day of the year".
+    """
+    name = subject or var.name
     size = f"{abs(result.slope_per_decade):.2f} {unit_words(var.unit)} per decade"
     p = format_p(result.p_value)
+    if not result.significant and result.p_value < ALPHA:
+        # Borderline (yearly series): the test passes but the 95% range still touches zero.
+        return (f"{name} has changed by {result.slope_per_decade:+.2f} "
+                f"{unit_words(var.unit)} per decade since {start_year}. The evidence is "
+                f"borderline ({p}), but the 95% range still includes no change, so we do "
+                f"not call it a clear trend.")
     if not result.significant:
-        return (f"{var.name} has changed by {result.slope_per_decade:+.2f} "
+        return (f"{name} has changed by {result.slope_per_decade:+.2f} "
                 f"{unit_words(var.unit)} per decade since {start_year}, but this could "
                 f"easily be chance ({p}). The data do not show a clear trend.")
     direction = "risen" if result.slope_per_decade > 0 else "fallen"
     strength = "very unlikely" if result.p_value < 0.01 else "unlikely"
-    return (f"{var.name} has {direction} by {size} since {start_year}. "
+    return (f"{name} has {direction} by {size} since {start_year}. "
             f"This trend is {strength} to be chance ({p}).")
 
 

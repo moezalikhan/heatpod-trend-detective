@@ -152,6 +152,8 @@ def cells_table(mask: xr.DataArray, cells: xr.Dataset, patterns: xr.DataArray,
     if ext_cells is not None:
         for k in ("level_old", "level_new", "change", "period_new"):
             df[f"extreme_{k}"] = ext_cells[k].values.ravel()
+        df["max_trend_slope"] = ext_cells["max_trend_slope"].values.ravel()
+        df["max_trend_significant"] = ext_cells["max_trend_significant"].values.ravel().astype(bool)
     return df
 
 
@@ -204,6 +206,11 @@ def export_variable(region: Region, var: Variable, start_year: int, out: Path) -
     if var.extremes:
         e = extremes.analyze(ds["region_annual_max"])
         ext_cells = extremes.cell_extremes(ds["annual_max"], mask)
+        # Trend of each year's maximum: more power than comparing two 22-year periods.
+        mt = trends.yearly_trend(ds["region_annual_max"])
+        mt_cells = trends.cell_trends(ds["annual_max"], mask, fn=trends.yearly_trend)
+        ext_cells = ext_cells.assign(max_trend_slope=mt_cells["slope_per_decade"],
+                                     max_trend_significant=mt_cells["significant"])
         block = e.to_dict()
         if not var.extremes_show_level:
             for k in ("level_old", "level_new", "loc_old", "loc_new"):
@@ -216,6 +223,13 @@ def export_variable(region: Region, var: Variable, start_year: int, out: Path) -
             # True when the fitted shape sits on its limit: the fit is constrained,
             # so the uncertainty range is probably too narrow. The app shows a caution.
             "shape_at_bound": bool(abs(e.shape) >= max(abs(b) for b in extremes.SHAPE_BOUNDS) - 1e-3),
+            "max_trend": {**mt.to_dict(), "verdict": trends.verdict_label(mt),
+                          "sentence": trends.sentence(var, mt, start_year, subject=var.yearly_max_name),
+                          "subject": var.yearly_max_name,
+                          "test": "Mann-Kendall (Hamed-Rao, 3 lags) and 95% range must agree",
+                          "data": "yearly maximums"},
+            "max_trend_cells": {"n_land": int(mask.sum()),
+                                **pod.opposite_trends(mt_cells)},
             "note": var.extremes_note,
             "periods": [list(p_) for p_ in extremes.PERIODS],
             "return_period": extremes.RETURN_PERIOD,

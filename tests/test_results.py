@@ -21,6 +21,15 @@ def test_every_region_has_every_variable_with_a_sentence():
             assert s["trend"]["verdict"] in ("SIGNIFICANT", "NOT SIGNIFICANT")
 
 
+def test_extremes_variables_have_a_yearly_maximum_trend():
+    for region in ("florida", "phoenix"):
+        for code in load_catalog().extreme_codes():
+            s = json.loads((RESULTS_DIR / region / code / "summary.json").read_text(encoding="utf-8"))
+            mt = s["extremes"]["max_trend"]
+            assert mt["sentence"].startswith(load_catalog()[code].yearly_max_name)
+            assert mt["verdict"] in ("SIGNIFICANT", "NOT SIGNIFICANT")
+
+
 def test_heat_index_extremes_hide_the_unreliable_level():
     for region in ("florida", "phoenix"):
         s = json.loads((RESULTS_DIR / region / "HEAT_INDEX" / "summary.json").read_text(encoding="utf-8"))

@@ -22,6 +22,7 @@ variables:
     source: power
     definition: The hottest moment of each day
     extremes: true
+    yearly_max_name: The hottest day of the year
     why_it_matters: >-
       Hotter afternoons cause heat stress, damage crops and push up
       electricity demand for cooling.
@@ -41,6 +42,7 @@ variables:
     source: power
     definition: Rain and snow, in millimeters per day
     extremes: true
+    yearly_max_name: The wettest day of the year
     why_it_matters: >-
       Changes in rain decide floods and droughts, and how much water
       farms and cities have.
@@ -53,6 +55,7 @@ variables:
     method: NOAA heat index formula
     definition: Temperature and humidity combined into "feels like" heat
     extremes: true
+    yearly_max_name: The highest heat index of the year
     why_it_matters: >-
       This is the heat people actually feel. Heat wave health warnings
       are based on it.
