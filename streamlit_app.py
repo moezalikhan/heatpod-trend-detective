@@ -43,6 +43,9 @@ def start_demo() -> None:
 def move(delta: int) -> None:
     i = min(max(ORDER.index(ss.step) + delta, 0), len(ORDER) - 1)
     ss.step = ORDER[i]
+    # The demo must end on a variable that has an extremes analysis.
+    if ss.step == "extremes" and not catalog[ss.variable].extremes:
+        ss.variable = DEMO["variable"]
 
 
 def end_demo() -> None:

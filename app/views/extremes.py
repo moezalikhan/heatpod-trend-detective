@@ -16,12 +16,23 @@ def _p(p: float) -> str:
     return "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
 
 
+def _switch(code: str) -> None:
+    # Runs before the rerun, so the sidebar picker and the URL follow the new variable.
+    st.session_state.variable = code
+
+
 def render(case) -> None:
     st.header("5. Are the worst days getting worse?", anchor=False)
     ext = case.summary.get("extremes")
     if ext is None:
-        names = ", ".join(v.name.lower() for v in dl.catalog().variables.values() if v.extremes)
-        st.markdown(f"Extremes are analysed for: {names}. Pick one of these in the sidebar.")
+        st.markdown(f"Extremes need a variable with a clear \"worst day\". For "
+                    f"{case.var.name.lower()} we look at the hottest days through these two:")
+        cat = dl.catalog()
+        b1, b2, _ = st.columns([1, 1.25, 0.75])
+        b1.button(f"Switch to {cat['HEAT_INDEX'].name.lower()}", on_click=_switch,
+                  args=("HEAT_INDEX",), type="primary", width="stretch", key="to_hi")
+        b2.button("Switch to daily max temperature", on_click=_switch,
+                  args=("T2M_MAX",), width="stretch", key="to_tmax")
         return
 
     unit = case.var.unit
