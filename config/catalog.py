@@ -86,3 +86,63 @@ def load_catalog(path: str | Path = VARIABLES_FILE) -> Catalog:
                 raise ValueError(f"{v.code}: unknown inputs {sorted(unknown)}")
 
     return Catalog(start=start, end=end, variables=variables)
+
+
+# ---------------------------------------------------------------------------
+# Regions (config/regions.yaml)
+# ---------------------------------------------------------------------------
+
+REGIONS_FILE = Path(__file__).with_name("regions.yaml")
+
+
+@dataclass(frozen=True)
+class Box:
+    """A latitude/longitude box in degrees."""
+
+    lat_min: float
+    lat_max: float
+    lon_min: float
+    lon_max: float
+
+    @property
+    def height(self) -> float:
+        return self.lat_max - self.lat_min
+
+    @property
+    def width(self) -> float:
+        return self.lon_max - self.lon_min
+
+
+@dataclass(frozen=True)
+class Region:
+    """A study region: its full box and the tiles used for NASA POWER requests."""
+
+    key: str
+    name: str
+    box: Box
+    tiles: tuple[Box, ...]
+    land_mask: bool = True
+
+
+def load_regions(path: str | Path = REGIONS_FILE) -> dict[str, Region]:
+    """Load regions and check every tile fits the NASA POWER size limit."""
+    raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    max_deg = float(raw["max_tile_degrees"])
+
+    regions: dict[str, Region] = {}
+    for key, r in raw["regions"].items():
+        box = Box(**r["box"])
+        tiles = tuple(Box(**t) for t in r["tiles"])
+        for t in tiles:
+            if t.height > max_deg or t.width > max_deg:
+                raise ValueError(f"{key}: tile {t} is larger than {max_deg} degrees")
+            inside = (box.lat_min <= t.lat_min < t.lat_max <= box.lat_max
+                      and box.lon_min <= t.lon_min < t.lon_max <= box.lon_max)
+            if not inside:
+                raise ValueError(f"{key}: tile {t} is outside the region box")
+        # Tiles must cover the whole box (they do not overlap, so areas add up).
+        if abs(sum(t.height * t.width for t in tiles) - box.height * box.width) > 1e-6:
+            raise ValueError(f"{key}: tiles do not cover the region box exactly")
+        regions[key] = Region(key=key, name=r["name"], box=box, tiles=tiles,
+                              land_mask=bool(r.get("land_mask", True)))
+    return regions
