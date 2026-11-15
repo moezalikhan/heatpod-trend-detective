@@ -15,6 +15,8 @@ Built for the NASA Space Apps Challenge 2026, challenge **Be an Earth System Tre
 
 ## Two demo cases
 
+Florida (humid heat) and Phoenix, Arizona (dry heat): same country, same NASA data, opposite kinds of heat.
+
 | | Florida (humid heat) | Phoenix, Arizona (dry heat) |
 |---|---|---|
 | Air temperature | +0.34 °C per decade, significant, all 46 squares | +0.44 °C per decade, significant, all 64 squares |

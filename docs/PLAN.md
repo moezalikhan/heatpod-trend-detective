@@ -16,7 +16,7 @@ A web app where a student picks a weather variable and a place. It shows 45 year
 2. **Is it changing the same way everywhere?** POD (Proper Orthogonal Decomposition) pattern map.
 3. **Are the worst days getting worse?** Extreme value analysis.
 
-Two ready demos: **Florida** (humid heat) and **Phoenix, Arizona** (dry heat).
+Two ready demos: Florida (humid heat) and Phoenix, Arizona (dry heat): same country, same NASA data, opposite kinds of heat.
 
 ---
 
