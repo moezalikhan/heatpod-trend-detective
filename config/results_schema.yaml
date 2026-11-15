@@ -1,0 +1,91 @@
+# Results schema (Module 7): the contract between the pipeline and the app.
+# The pipeline writes data/results/ in this shape; the app reads only this.
+# Change it only with care: bump `version` and update the app in the same commit.
+version: 1
+max_total_mb: 5
+
+root_files:
+  index.json:
+    type: json
+    required: [schema_version, period, regions]
+
+region_files:
+  region.json:
+    type: json
+    required: [key, name, climate, box, n_land_cells, variables]
+  outline.geojson:
+    type: geojson
+
+variable_files:
+  summary.json:
+    type: json
+    required:
+      - region
+      - variable
+      - name
+      - unit
+      - period
+      - trend.slope_per_decade
+      - trend.ci_low
+      - trend.ci_high
+      - trend.sen_slope_per_decade
+      - trend.p_value
+      - trend.significant
+      - trend.verdict
+      - trend.sentence
+      - cells.n_land
+      - cells.rising
+      - cells.falling
+      - cells.opposite
+      - pod.modes
+    # Present only for variables with `extremes: true` in variables.yaml.
+    optional_blocks:
+      extremes:
+        - period_new
+        - period_new_low
+        - period_new_high
+        - change
+        - change_low
+        - change_high
+        - significant
+        - verdict
+        - sentence
+        - show_level
+        - shape_at_bound
+        - periods
+        - return_period
+
+  series_monthly.parquet:
+    type: parquet
+    # Regional monthly anomaly with the trend line and the range of lines
+    # allowed by the 95% interval of the slope.
+    columns: {time: datetime, anomaly: float, trend: float, trend_low: float, trend_high: float}
+
+  series_annual.parquet:
+    type: parquet
+    # Regional yearly mean, yearly maximum and yearly mean anomaly (for stripes).
+    columns: {year: int, mean: float, max: float, anomaly: float}
+
+  cells.parquet:
+    type: parquet
+    # One row per grid cell; values are empty (NaN) for sea cells.
+    columns:
+      lat: float
+      lon: float
+      land: bool
+      slope_per_decade: float
+      p_value: float
+      q_value: float
+      significant: bool
+      pod_mode_1: float
+      pod_mode_2: float
+      pod_mode_3: float
+    optional_columns:
+      extreme_level_old: float
+      extreme_level_new: float
+      extreme_change: float
+      extreme_period_new: float
+
+  pod_series.parquet:
+    type: parquet
+    columns: {time: datetime, mode: int, value: float}

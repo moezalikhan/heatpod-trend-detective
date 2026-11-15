@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "period": {
+    "start": 1981,
+    "end": 2025
+  },
+  "regions": {
+    "florida": [
+      "T2M",
+      "T2M_MAX",
+      "RH2M",
+      "PRECTOTCORR",
+      "HEAT_INDEX"
+    ],
+    "phoenix": [
+      "T2M",
+      "T2M_MAX",
+      "RH2M",
+      "PRECTOTCORR",
+      "HEAT_INDEX"
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "region": "phoenix",
+  "variable": "HEAT_INDEX",
+  "name": "Heat index",
+  "unit": "°C",
+  "definition": "Temperature and humidity combined into \"feels like\" heat",
+  "why_it_matters": "This is the heat people actually feel. Heat wave health warnings are based on it.",
+  "limitation": "Combines the daily maximum temperature with daily average humidity, so it is an approximation.",
+  "period": {
+    "start": 1981,
+    "end": 2025
+  },
+  "trend": {
+    "slope_per_decade": 0.43592,
+    "ci_low": 0.30398,
+    "ci_high": 0.56786,
+    "sen_slope_per_decade": 0.448874,
+    "p_value": 0.0,
+    "significant": true,
+    "n": 540,
+    "n_eff": 391.727855,
+    "verdict": "SIGNIFICANT",
+    "sentence": "Heat index has risen by 0.44 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
+    "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
+    "data": "monthly anomalies"
+  },
+  "cells": {
+    "n_land": 70,
+    "rising": 70,
+    "falling": 0,
+    "opposite": false
+  },
+  "pod": {
+    "modes": [
+      {
+        "mode": 1,
+        "variance_fraction": 0.9076,
+        "separated": true,
+        "series_slope_per_decade": 0.240133,
+        "series_p_value": 0.0,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 2,
+        "variance_fraction": 0.04287,
+        "separated": true,
+        "series_slope_per_decade": 0.162534,
+        "series_p_value": 0.000855,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 3,
+        "variance_fraction": 0.018556,
+        "separated": true,
+        "series_slope_per_decade": -0.022029,
+        "series_p_value": 0.520328,
+        "series_verdict": "NOT SIGNIFICANT"
+      }
+    ],
+    "n_eff": 330.96614
+  },
+  "extremes": {
+    "shape": -0.5,
+    "loc_old": null,
+    "scale_old": 1.389477,
+    "loc_new": null,
+    "scale_new": 1.518062,
+    "level_old": null,
+    "level_new": null,
+    "change": 1.580853,
+    "change_low": 0.798249,
+    "change_high": 2.167788,
+    "period_new": 2.337591,
+    "period_new_low": 1.59196,
+    "period_new_high": 4.233932,
+    "significant": true,
+    "n_boot": 1000,
+    "verdict": "SIGNIFICANT",
+    "sentence": "The heat index level that used to be reached about once every 20 years is now reached about once every 2 years (likely range 1.6 to 4 years).",
+    "show_level": false,
+    "shape_at_bound": true,
+    "note": "Heat index extremes here run several degrees too high, because the daily maximum temperature is combined with the day's average humidity (afternoons are drier). So we show how much more often extremes happen, not their exact level.",
+    "periods": [
+      [
+        1981,
+        2003
+      ],
+      [
+        2004,
+        2025
+      ]
+    ],
+    "return_period": 20
+  }
+}

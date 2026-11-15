@@ -1,0 +1,62 @@
+{
+  "region": "florida",
+  "variable": "RH2M",
+  "name": "Relative humidity",
+  "unit": "%",
+  "definition": "How much moisture is in the air, compared with the most it can hold",
+  "why_it_matters": "Humid air makes heat more dangerous, because sweat cannot cool the body when the air is already full of moisture.",
+  "limitation": null,
+  "period": {
+    "start": 1981,
+    "end": 2025
+  },
+  "trend": {
+    "slope_per_decade": -0.266626,
+    "ci_low": -0.805518,
+    "ci_high": 0.272266,
+    "sen_slope_per_decade": -0.364337,
+    "p_value": 0.252156,
+    "significant": false,
+    "n": 540,
+    "n_eff": 131.568509,
+    "verdict": "NOT SIGNIFICANT",
+    "sentence": "Relative humidity has changed by -0.27 percentage points per decade since 1981, but this could easily be chance (p = 0.252). The data do not show a clear trend.",
+    "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
+    "data": "monthly anomalies"
+  },
+  "cells": {
+    "n_land": 53,
+    "rising": 0,
+    "falling": 0,
+    "opposite": false
+  },
+  "pod": {
+    "modes": [
+      {
+        "mode": 1,
+        "variance_fraction": 0.721467,
+        "separated": true,
+        "series_slope_per_decade": -0.06508,
+        "series_p_value": 0.271878,
+        "series_verdict": "NOT SIGNIFICANT"
+      },
+      {
+        "mode": 2,
+        "variance_fraction": 0.145139,
+        "separated": true,
+        "series_slope_per_decade": -0.036172,
+        "series_p_value": 0.434373,
+        "series_verdict": "NOT SIGNIFICANT"
+      },
+      {
+        "mode": 3,
+        "variance_fraction": 0.046155,
+        "separated": true,
+        "series_slope_per_decade": -0.093897,
+        "series_p_value": 0.102965,
+        "series_verdict": "NOT SIGNIFICANT"
+      }
+    ],
+    "n_eff": 127.33587
+  }
+}

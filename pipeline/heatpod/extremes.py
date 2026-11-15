@@ -196,9 +196,10 @@ def format_years(n: float) -> str:
 
 
 def sentence(var: Variable, r: ExtremesResult) -> str:
-    level = f"{r.level_old:.1f} {var.unit}"
+    # Some variables (heat index) hide the level because it is not reliable.
+    level = f" ({r.level_old:.1f} {var.unit})" if var.extremes_show_level else ""
     head = (f"The {var.name.lower()} level that used to be reached about once every "
-            f"{RETURN_PERIOD} years ({level}) is now reached about once every "
+            f"{RETURN_PERIOD} years{level} is now reached about once every "
             f"{format_years(r.period_new)} years")
     rng = (f" (likely range {format_years(r.period_new_low)} to "
            f"{format_years(r.period_new_high)} years)")

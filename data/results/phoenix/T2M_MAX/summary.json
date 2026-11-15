@@ -1,0 +1,95 @@
+{
+  "region": "phoenix",
+  "variable": "T2M_MAX",
+  "name": "Daily maximum temperature",
+  "unit": "°C",
+  "definition": "The hottest moment of each day",
+  "why_it_matters": "Hotter afternoons cause heat stress, damage crops and push up electricity demand for cooling.",
+  "limitation": null,
+  "period": {
+    "start": 1981,
+    "end": 2025
+  },
+  "trend": {
+    "slope_per_decade": 0.429655,
+    "ci_low": 0.29125,
+    "ci_high": 0.56806,
+    "sen_slope_per_decade": 0.440969,
+    "p_value": 0.0,
+    "significant": true,
+    "n": 540,
+    "n_eff": 361.562869,
+    "verdict": "SIGNIFICANT",
+    "sentence": "Daily maximum temperature has risen by 0.43 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
+    "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
+    "data": "monthly anomalies"
+  },
+  "cells": {
+    "n_land": 70,
+    "rising": 70,
+    "falling": 0,
+    "opposite": false
+  },
+  "pod": {
+    "modes": [
+      {
+        "mode": 1,
+        "variance_fraction": 0.928776,
+        "separated": true,
+        "series_slope_per_decade": 0.2366,
+        "series_p_value": 0.0,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 2,
+        "variance_fraction": 0.030944,
+        "separated": true,
+        "series_slope_per_decade": -0.182727,
+        "series_p_value": 0.000348,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 3,
+        "variance_fraction": 0.019895,
+        "separated": true,
+        "series_slope_per_decade": -0.095123,
+        "series_p_value": 0.085169,
+        "series_verdict": "NOT SIGNIFICANT"
+      }
+    ],
+    "n_eff": 308.606915
+  },
+  "extremes": {
+    "shape": -0.228512,
+    "loc_old": 40.987457,
+    "scale_old": 1.223811,
+    "loc_new": 41.394459,
+    "scale_new": 1.225456,
+    "level_old": 43.626343,
+    "level_new": 44.036892,
+    "change": 0.410549,
+    "change_low": -0.866335,
+    "change_high": 1.829388,
+    "period_new": 11.046913,
+    "period_new_low": 2.886924,
+    "period_new_high": 5371.48334,
+    "significant": false,
+    "n_boot": 1000,
+    "verdict": "NOT SIGNIFICANT",
+    "sentence": "The daily maximum temperature level that used to be reached about once every 20 years (43.6 °C) is now reached about once every 11 years (likely range 3 to more than 1000 years), but this change could be chance.",
+    "show_level": true,
+    "shape_at_bound": false,
+    "note": null,
+    "periods": [
+      [
+        1981,
+        2003
+      ],
+      [
+        2004,
+        2025
+      ]
+    ],
+    "return_period": 20
+  }
+}

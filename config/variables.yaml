@@ -59,3 +59,10 @@ variables:
     limitation: >-
       Combines the daily maximum temperature with daily average humidity,
       so it is an approximation.
+    # The approximation pushes extreme values several degrees too high, so the
+    # app shows how often extremes happen, not their level.
+    extremes_show_level: false
+    extremes_note: >-
+      Heat index extremes here run several degrees too high, because the daily
+      maximum temperature is combined with the day's average humidity (afternoons
+      are drier). So we show how much more often extremes happen, not their exact level.

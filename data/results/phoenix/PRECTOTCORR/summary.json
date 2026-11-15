@@ -1,0 +1,95 @@
+{
+  "region": "phoenix",
+  "variable": "PRECTOTCORR",
+  "name": "Precipitation",
+  "unit": "mm/day",
+  "definition": "Rain and snow, in millimeters per day",
+  "why_it_matters": "Changes in rain decide floods and droughts, and how much water farms and cities have.",
+  "limitation": null,
+  "period": {
+    "start": 1981,
+    "end": 2025
+  },
+  "trend": {
+    "slope_per_decade": -0.074258,
+    "ci_low": -0.124058,
+    "ci_high": -0.024458,
+    "sen_slope_per_decade": -0.064922,
+    "p_value": 0.001416,
+    "significant": true,
+    "n": 540,
+    "n_eff": 348.731737,
+    "verdict": "SIGNIFICANT",
+    "sentence": "Precipitation has fallen by 0.07 mm/day per decade since 1981. This trend is very unlikely to be chance (p = 0.001).",
+    "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
+    "data": "monthly anomalies"
+  },
+  "cells": {
+    "n_land": 70,
+    "rising": 0,
+    "falling": 52,
+    "opposite": false
+  },
+  "pod": {
+    "modes": [
+      {
+        "mode": 1,
+        "variance_fraction": 0.785489,
+        "separated": true,
+        "series_slope_per_decade": -0.121097,
+        "series_p_value": 0.001692,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 2,
+        "variance_fraction": 0.075577,
+        "separated": true,
+        "series_slope_per_decade": -0.069164,
+        "series_p_value": 0.084339,
+        "series_verdict": "NOT SIGNIFICANT"
+      },
+      {
+        "mode": 3,
+        "variance_fraction": 0.045742,
+        "separated": true,
+        "series_slope_per_decade": 0.077614,
+        "series_p_value": 0.003966,
+        "series_verdict": "SIGNIFICANT"
+      }
+    ],
+    "n_eff": 336.31985
+  },
+  "extremes": {
+    "shape": 0.053951,
+    "loc_old": 13.950903,
+    "scale_old": 4.739562,
+    "loc_new": 15.832519,
+    "scale_new": 5.524122,
+    "level_old": 29.218985,
+    "level_new": 33.627992,
+    "change": 4.409008,
+    "change_low": -3.805127,
+    "change_high": 14.336825,
+    "period_new": 10.26031,
+    "period_new_low": 3.084219,
+    "period_new_high": 40.174989,
+    "significant": false,
+    "n_boot": 1000,
+    "verdict": "NOT SIGNIFICANT",
+    "sentence": "The precipitation level that used to be reached about once every 20 years (29.2 mm/day) is now reached about once every 10 years (likely range 3 to 40 years), but this change could be chance.",
+    "show_level": true,
+    "shape_at_bound": false,
+    "note": null,
+    "periods": [
+      [
+        1981,
+        2003
+      ],
+      [
+        2004,
+        2025
+      ]
+    ],
+    "return_period": 20
+  }
+}

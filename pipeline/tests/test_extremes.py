@@ -86,9 +86,19 @@ def test_cell_extremes_skips_sea_cells():
 
 # --- sentence ---------------------------------------------------------------
 
+RESULT = ex.ExtremesResult(-0.2, 40, 1, 41, 1, 44.0, 45.5, 1.5, 0.6, 2.4, 3.2, 1.8, 7.5, True, 1000)
+
+
 def test_sentence_reads_plainly():
+    var = load_catalog()["T2M_MAX"]
+    assert ex.sentence(var, RESULT) == (
+        "The daily maximum temperature level that used to be reached about once every "
+        "20 years (44.0 °C) is now reached about once every 3 years (likely range 1.8 to 8 years).")
+
+
+def test_heat_index_sentence_hides_the_unreliable_level():
     var = load_catalog()["HEAT_INDEX"]
-    r = ex.ExtremesResult(-0.2, 40, 1, 41, 1, 44.0, 45.5, 1.5, 0.6, 2.4, 3.2, 1.8, 7.5, True, 1000)
-    assert ex.sentence(var, r) == (
-        "The heat index level that used to be reached about once every 20 years (44.0 °C) "
+    assert not var.extremes_show_level and var.extremes_note
+    assert ex.sentence(var, RESULT) == (
+        "The heat index level that used to be reached about once every 20 years "
         "is now reached about once every 3 years (likely range 1.8 to 8 years).")

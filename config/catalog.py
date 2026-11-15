@@ -32,6 +32,8 @@ class Variable:
     method: str | None = None
     limitation: str | None = None
     extremes: bool = False          # fit extreme value statistics (Module 6)
+    extremes_show_level: bool = True  # False: show only how often, not the level
+    extremes_note: str | None = None
 
     @property
     def is_calculated(self) -> bool:

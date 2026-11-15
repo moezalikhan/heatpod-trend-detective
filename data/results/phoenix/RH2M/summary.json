@@ -1,0 +1,62 @@
+{
+  "region": "phoenix",
+  "variable": "RH2M",
+  "name": "Relative humidity",
+  "unit": "%",
+  "definition": "How much moisture is in the air, compared with the most it can hold",
+  "why_it_matters": "Humid air makes heat more dangerous, because sweat cannot cool the body when the air is already full of moisture.",
+  "limitation": null,
+  "period": {
+    "start": 1981,
+    "end": 2025
+  },
+  "trend": {
+    "slope_per_decade": -1.442296,
+    "ci_low": -2.295933,
+    "ci_high": -0.588658,
+    "sen_slope_per_decade": -1.394664,
+    "p_value": 0.001278,
+    "significant": true,
+    "n": 540,
+    "n_eff": 168.510037,
+    "verdict": "SIGNIFICANT",
+    "sentence": "Relative humidity has fallen by 1.44 percentage points per decade since 1981. This trend is very unlikely to be chance (p = 0.001).",
+    "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
+    "data": "monthly anomalies"
+  },
+  "cells": {
+    "n_land": 70,
+    "rising": 0,
+    "falling": 61,
+    "opposite": false
+  },
+  "pod": {
+    "modes": [
+      {
+        "mode": 1,
+        "variance_fraction": 0.884996,
+        "separated": true,
+        "series_slope_per_decade": -0.195396,
+        "series_p_value": 0.001052,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 2,
+        "variance_fraction": 0.045862,
+        "separated": false,
+        "series_slope_per_decade": 0.194621,
+        "series_p_value": 0.003371,
+        "series_verdict": "SIGNIFICANT"
+      },
+      {
+        "mode": 3,
+        "variance_fraction": 0.037303,
+        "separated": false,
+        "series_slope_per_decade": 0.018284,
+        "series_p_value": 0.821791,
+        "series_verdict": "NOT SIGNIFICANT"
+      }
+    ],
+    "n_eff": 154.081196
+  }
+}
