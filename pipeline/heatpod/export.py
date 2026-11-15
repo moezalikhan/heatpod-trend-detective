@@ -73,10 +73,10 @@ def write_parquet(path: Path, df: pd.DataFrame) -> None:
 # ---------------------------------------------------------------------------
 
 def outline_geojson(region: Region, tolerance: float = 0.02) -> dict:
-    """Natural Earth 1:50m coastlines, state and country borders inside the box, as lines.
+    """Natural Earth 1:50m coastline and state/country borders inside the box, as lines.
 
     Lines (not filled polygons) so the box edges are not drawn as fake coastline.
-    State borders give inland regions (Phoenix) a map reference.
+    Each feature has properties.kind: "border" (drawn thin grey) or "coast" (ink, on top).
     """
     import regionmask
     from shapely.geometry import box, mapping
@@ -85,14 +85,16 @@ def outline_geojson(region: Region, tolerance: float = 0.02) -> dict:
     b = region.box
     clip = box(b.lon_min, b.lat_min, b.lon_max, b.lat_max)
     features = []
-    polygons = list(ne.land_50.polygons) + list(ne.us_states_50.polygons) + list(ne.countries_50.polygons)
-    for poly in polygons:
-        part = poly.boundary.intersection(clip)
-        if part.is_empty:
-            continue
-        part = part.simplify(tolerance, preserve_topology=True)
-        features.append({"type": "Feature", "properties": {},
-                         "geometry": _round_coords(mapping(part))})
+    layers = [("border", list(ne.us_states_50.polygons) + list(ne.countries_50.polygons)),
+              ("coast", list(ne.land_50.polygons))]
+    for kind, polygons in layers:
+        for poly in polygons:
+            part = poly.boundary.intersection(clip)
+            if part.is_empty:
+                continue
+            part = part.simplify(tolerance, preserve_topology=True)
+            features.append({"type": "Feature", "properties": {"kind": kind},
+                             "geometry": _round_coords(mapping(part))})
     return {"type": "FeatureCollection", "features": features}
 
 
@@ -283,7 +285,7 @@ def _region_extra(key: str) -> dict:
     import yaml
     from config.catalog import REGIONS_FILE
     r = yaml.safe_load(REGIONS_FILE.read_text(encoding="utf-8"))["regions"][key]
-    return {"climate": r.get("climate", ""), "places": r.get("places", [])}
+    return {"climate": r.get("climate", ""), "places": r.get("places", []), "state": r.get("state")}
 
 
 def main(argv: list[str] | None = None) -> int:

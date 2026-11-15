@@ -14,6 +14,7 @@ regions:
       lon_min: -87.6
       lon_max: -80.0
     land_mask: true   # the box contains a lot of sea
+    state: Florida    # keep only squares inside this US state (Natural Earth admin-1)
     places:           # labels on the region map only
       - {name: Tallahassee, lat: 30.44, lon: -84.28}
       - {name: Orlando, lat: 28.54, lon: -81.38}
@@ -36,6 +37,7 @@ regions:
       lon_min: -114.5
       lon_max: -110.0
     land_mask: true
+    state: Arizona    # drops squares in California and Mexico
     places:
       - {name: Phoenix, lat: 33.45, lon: -112.07}
       - {name: Tucson, lat: 32.22, lon: -110.97}

@@ -24,13 +24,14 @@
       "lon": -114.62
     }
   ],
+  "state": "Arizona",
   "box": {
     "lat_min": 31.5,
     "lat_max": 35.5,
     "lon_min": -114.5,
     "lon_max": -110.0
   },
-  "n_land_cells": 70,
+  "n_land_cells": 64,
   "variables": [
     "T2M",
     "T2M_MAX",

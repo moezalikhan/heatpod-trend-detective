@@ -34,6 +34,6 @@ Code written with Claude Code (Anthropic) under the author's direction. All stat
 ## 30-second demo video plan
 
 1. (0-5 s) Open the live link, title and warming stripes.
-2. (5-15 s) Click "Watch a demo": Florida heat index, step 3 verdict box (+0.84 °C per decade, SIGNIFICANT).
+2. (5-15 s) Click "Watch a demo": Florida heat index, step 3 verdict box (+0.86 °C per decade, SIGNIFICANT).
 3. (15-23 s) Step 4: every square warming, Pattern 2 north vs south.
 4. (23-30 s) Switch to Phoenix, step 5: the old 20-year heat level now about every 2 years, with the honest caution note.

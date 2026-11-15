@@ -15,9 +15,11 @@ def render(case) -> None:
     st.markdown(
         f"The study box runs from latitude {b['lat_min']} to {b['lat_max']} and longitude "
         f"{b['lon_min']} to {b['lon_max']}. NASA's data come as squares of about 55 km. "
-        f"We keep the **{info['n_land_cells']} squares on land**; sea squares are removed.")
+        f"We keep the **{info['n_land_cells']} squares on land inside "
+        f"{info.get('state') or 'the region'}**; sea squares and squares in neighbouring "
+        f"states or countries are removed.")
     cells = dl.table(case.region, case.code, "cells")
     st.altair_chart(charts.region_map(cells, dl.outline(case.region), info.get("places")),
                     theme=None, width="stretch")
-    st.caption("Grey squares: land grid cells used in every calculation. Lines: coastline, state "
-               "and country borders. Squares mark a few cities for orientation.")
+    st.caption("Grey squares: land grid cells used in every calculation. Dark line: coastline. "
+               "Thin grey lines: state and country borders. Small squares mark a few cities.")

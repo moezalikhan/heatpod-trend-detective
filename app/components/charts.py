@@ -140,6 +140,15 @@ def _geo(fc: dict) -> alt.InlineData:
     return alt.InlineData(values=fc, format=alt.DataFormat(property="features", type="json"))
 
 
+def _outline_layers(outline: dict) -> list:
+    """State and country borders in thin grey, the coastline in ink on top."""
+    border = alt.Chart(_geo(outline)).transform_filter("datum.properties.kind == 'border'") \
+        .mark_geoshape(fill=None, stroke=SLATE, strokeWidth=0.6, strokeOpacity=0.7)
+    coast = alt.Chart(_geo(outline)).transform_filter("datum.properties.kind == 'coast'") \
+        .mark_geoshape(fill=None, stroke=INK, strokeWidth=1)
+    return [border, coast]
+
+
 def cell_map(cells: pd.DataFrame, outline: dict, value: str, legend_title: str,
              tooltip_title: str, significant_col: str | None = None, fmt: str = "+.2f") -> alt.LayerChart:
     """Grid cells colored on a diverging scale; optional grey for not significant."""
@@ -158,9 +167,8 @@ def cell_map(cells: pd.DataFrame, outline: dict, value: str, legend_title: str,
 
     squares = alt.Chart(_geo(fc)).mark_geoshape(stroke=PAPER, strokeWidth=1).encode(
         color=color, tooltip=tips)
-    land = alt.Chart(_geo(outline)).mark_geoshape(fill=None, stroke=INK, strokeWidth=1)
     # Side padding keeps the outer legend labels (for example -0.4) inside the chart.
-    chart = alt.layer(squares, land).project(type="mercator").properties(
+    chart = alt.layer(squares, *_outline_layers(outline)).project(type="mercator").properties(
         height=420, width="container", padding={"left": 24, "right": 24, "top": 4, "bottom": 4})
     return style(chart)
 
@@ -171,8 +179,7 @@ def region_map(cells: pd.DataFrame, outline: dict, places: list[dict] | None = N
     squares = alt.Chart(_geo(fc)).mark_geoshape(fill=RULE, stroke=PAPER, strokeWidth=1).encode(
         tooltip=[alt.Tooltip("properties.lat:Q", title="Latitude", format=".2f"),
                  alt.Tooltip("properties.lon:Q", title="Longitude", format=".3f")])
-    land = alt.Chart(_geo(outline)).mark_geoshape(fill=None, stroke=INK, strokeWidth=1)
-    layers = [squares, land]
+    layers = [squares, *_outline_layers(outline)]
     if places:
         p = pd.DataFrame(places)
         layers.append(alt.Chart(p).mark_point(filled=True, color=INK, size=30, shape="square")

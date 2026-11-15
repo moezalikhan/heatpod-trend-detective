@@ -17,11 +17,12 @@ Built for the NASA Space Apps Challenge 2026, challenge **Be an Earth System Tre
 
 | | Florida (humid heat) | Phoenix, Arizona (dry heat) |
 |---|---|---|
-| Air temperature | +0.34 °C per decade, significant, all 53 land squares | +0.43 °C per decade, significant, all 70 squares |
-| Heat index ("feels like") | **+0.84 °C per decade**, significant: rising more than twice as fast as air temperature | +0.44 °C per decade, significant |
-| Humidity | no clear trend | **-1.4 percentage points per decade**, significant |
-| Rain | no clear trend | -0.07 mm/day per decade, significant (about -9% of its average per decade) |
-| Hottest days (20-year level) | no clear change: the sea and afternoon storms cap Florida's extremes | heat index level that came once every 20 years now comes about every 2 years (see limitations) |
+| Air temperature | +0.34 °C per decade, significant, all 46 squares | +0.44 °C per decade, significant, all 64 squares |
+| Heat index ("feels like") | **+0.86 °C per decade**, significant: rising more than twice as fast as air temperature | +0.44 °C per decade, significant |
+| Humidity | no clear trend | **-1.5 percentage points per decade**, significant |
+| Rain | no clear trend | -0.08 mm/day per decade, significant (about -9% of its average per decade) |
+| Hottest day of the year | +0.15 °C per decade, no clear trend region-wide; the highest heat index of the year rises significantly in 21 of 46 squares (south peninsula) | **+0.31 °C per decade, significant** (p = 0.018); highest heat index of the year +0.64 °C per decade (p < 0.001) |
+| 20-year level | no clear change: the sea and afternoon storms cap Florida's extremes | heat index level that came once every 20 years now comes about every 2 years (see limitations) |
 
 All numbers are for 1981 to 2025, from monthly anomalies (seasonal cycle removed).
 
@@ -39,7 +40,7 @@ Links open a specific case, for example `?region=phoenix&variable=HEAT_INDEX&ste
 
 - **NASA POWER** daily regional API (most weather variables from **MERRA-2**), about 55 km grid (0.5 x 0.625 degrees), 1 January 1981 to 31 December 2025, local solar time.
 - Variables: `T2M` air temperature at 2 m, `T2M_MAX` daily maximum temperature, `RH2M` relative humidity, `PRECTOTCORR` precipitation, plus the **NOAA heat index** calculated from `T2M_MAX` and `RH2M`.
-- Regions: Florida (24.5 to 31.0 N, 87.6 to 80.0 W) and Phoenix (31.5 to 35.5 N, 114.5 to 110.0 W). Ocean squares are removed with the Natural Earth 1:50m land mask.
+- Regions: Florida (24.5 to 31.0 N, 87.6 to 80.0 W) and Phoenix (31.5 to 35.5 N, 114.5 to 110.0 W). Only squares whose center is on land inside the state are kept (Natural Earth 1:50m land and US states): 46 squares in Florida, 64 in Arizona.
 
 ## Method
 
@@ -52,11 +53,12 @@ Links open a specific case, for example `?region=phoenix&variable=HEAT_INDEX&ste
 | Robust check | Sen's slope | Outliers do not drive the result |
 | Many squares | Benjamini-Hochberg false discovery rate | Removes "significant by luck" squares |
 | Patterns | POD (EOF) by SVD of the area-weighted anomaly matrix; North's rule of thumb for mode separation | Shows where the region moves together or in opposite directions |
-| Extremes | GEV fit to yearly maxima for 1981-2003 and 2004-2025 with a shared shape (bounded to -0.5..0.5); 20-year return levels; 1000-sample bootstrap | 22 values per period are too few for a free shape parameter |
+| Extremes, trend | Corrected Mann-Kendall (3 lags) and Sen's slope on the 45 yearly maximums; SIGNIFICANT only when the test and the widened 95% range agree; per square with Benjamini-Hochberg | Uses all years at once, so it has more power than comparing two periods |
+| Extremes, rare levels | GEV fit to yearly maxima for 1981-2003 and 2004-2025 with a shared shape (bounded to -0.5..0.5); 20-year return levels; 1000-sample bootstrap | 22 values per period are too few for a free shape parameter |
 
 ## Validation
 
-- **73 pipeline tests** on fake data with known answers, **59 app tests** (Streamlit AppTest: every step, both regions, every variable, the demo). All run in GitHub Actions on every push.
+- **79 pipeline tests** on fake data with known answers, **63 app tests** (Streamlit AppTest: every step, both regions, every variable, the demo). All run in GitHub Actions on every push.
 - **Simulation of the trend test** (1500 series of 540 months, 5% level):
 
   | Test | Pure noise | Linked months (0.6) | Strongly linked (0.8) |
@@ -65,6 +67,7 @@ Links open a specific case, for example `?region=phoenix&variable=HEAT_INDEX&ste
   | Our corrected test | 6.0% | 6.9% | 8.1% |
 
   The pymannkendall default Hamed-Rao settings gave 10 to 16% false alarms on linked months, so we changed them.
+- **Yearly maximum trend:** in simulation (45 years) 3 to 7% false alarms and 89% of real trends found.
 - **Extremes test:** 6 false alarms in 100 simulated no-change cases; fitting large simulated GEV samples gives back the parameters used to create them.
 - **Check against NASA's point service** (used by the POWER Data Access Viewer): the Phoenix square at 33.5 N, 112.5 W matches our downloaded grid exactly for all 366 days of 2020 and all four variables (`python -m pipeline.heatpod.check_point`).
 

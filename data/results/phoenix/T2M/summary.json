@@ -11,22 +11,22 @@
     "end": 2025
   },
   "trend": {
-    "slope_per_decade": 0.429924,
-    "ci_low": 0.316796,
-    "ci_high": 0.543051,
-    "sen_slope_per_decade": 0.442956,
+    "slope_per_decade": 0.440491,
+    "ci_low": 0.326816,
+    "ci_high": 0.554165,
+    "sen_slope_per_decade": 0.452532,
     "p_value": 0.0,
     "significant": true,
     "n": 540,
-    "n_eff": 379.010752,
+    "n_eff": 379.972692,
     "verdict": "SIGNIFICANT",
-    "sentence": "Air temperature at 2 meters has risen by 0.43 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
+    "sentence": "Air temperature at 2 meters has risen by 0.44 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
     "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
     "data": "monthly anomalies"
   },
   "cells": {
-    "n_land": 70,
-    "rising": 70,
+    "n_land": 64,
+    "rising": 64,
     "falling": 0,
     "opposite": false
   },
@@ -34,29 +34,29 @@
     "modes": [
       {
         "mode": 1,
-        "variance_fraction": 0.937545,
+        "variance_fraction": 0.941451,
         "separated": true,
-        "series_slope_per_decade": 0.27685,
+        "series_slope_per_decade": 0.280711,
         "series_p_value": 0.0,
         "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 2,
-        "variance_fraction": 0.027134,
+        "variance_fraction": 0.026088,
         "separated": true,
-        "series_slope_per_decade": 0.167675,
-        "series_p_value": 0.000414,
+        "series_slope_per_decade": 0.150849,
+        "series_p_value": 0.000667,
         "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 3,
-        "variance_fraction": 0.017648,
+        "variance_fraction": 0.016565,
         "separated": true,
-        "series_slope_per_decade": -0.052235,
-        "series_p_value": 0.357808,
+        "series_slope_per_decade": -0.048325,
+        "series_p_value": 0.467172,
         "series_verdict": "NOT SIGNIFICANT"
       }
     ],
-    "n_eff": 303.091034
+    "n_eff": 301.692176
   }
 }

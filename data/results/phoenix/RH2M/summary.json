@@ -11,52 +11,52 @@
     "end": 2025
   },
   "trend": {
-    "slope_per_decade": -1.442296,
-    "ci_low": -2.295933,
-    "ci_high": -0.588658,
-    "sen_slope_per_decade": -1.394664,
-    "p_value": 0.001278,
+    "slope_per_decade": -1.496735,
+    "ci_low": -2.358585,
+    "ci_high": -0.634884,
+    "sen_slope_per_decade": -1.460333,
+    "p_value": 0.000951,
     "significant": true,
     "n": 540,
-    "n_eff": 168.510037,
+    "n_eff": 168.478451,
     "verdict": "SIGNIFICANT",
-    "sentence": "Relative humidity has fallen by 1.44 percentage points per decade since 1981. This trend is very unlikely to be chance (p = 0.001).",
+    "sentence": "Relative humidity has fallen by 1.50 percentage points per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
     "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
     "data": "monthly anomalies"
   },
   "cells": {
-    "n_land": 70,
+    "n_land": 64,
     "rising": 0,
-    "falling": 61,
+    "falling": 58,
     "opposite": false
   },
   "pod": {
     "modes": [
       {
         "mode": 1,
-        "variance_fraction": 0.884996,
+        "variance_fraction": 0.893105,
         "separated": true,
-        "series_slope_per_decade": -0.195396,
-        "series_p_value": 0.001052,
+        "series_slope_per_decade": -0.199619,
+        "series_p_value": 0.000794,
         "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 2,
-        "variance_fraction": 0.045862,
-        "separated": false,
-        "series_slope_per_decade": 0.194621,
-        "series_p_value": 0.003371,
+        "variance_fraction": 0.044612,
+        "separated": true,
+        "series_slope_per_decade": 0.177124,
+        "series_p_value": 0.005878,
         "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 3,
-        "variance_fraction": 0.037303,
-        "separated": false,
-        "series_slope_per_decade": 0.018284,
-        "series_p_value": 0.821791,
+        "variance_fraction": 0.033437,
+        "separated": true,
+        "series_slope_per_decade": 0.049711,
+        "series_p_value": 0.521729,
         "series_verdict": "NOT SIGNIFICANT"
       }
     ],
-    "n_eff": 154.081196
+    "n_eff": 153.550519
   }
 }

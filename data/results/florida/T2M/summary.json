@@ -11,22 +11,22 @@
     "end": 2025
   },
   "trend": {
-    "slope_per_decade": 0.335259,
-    "ci_low": 0.226983,
-    "ci_high": 0.443534,
-    "sen_slope_per_decade": 0.348853,
+    "slope_per_decade": 0.335878,
+    "ci_low": 0.228636,
+    "ci_high": 0.44312,
+    "sen_slope_per_decade": 0.347914,
     "p_value": 0.0,
     "significant": true,
     "n": 540,
-    "n_eff": 343.406848,
+    "n_eff": 340.111107,
     "verdict": "SIGNIFICANT",
     "sentence": "Air temperature at 2 meters has risen by 0.34 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
     "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
     "data": "monthly anomalies"
   },
   "cells": {
-    "n_land": 53,
-    "rising": 53,
+    "n_land": 46,
+    "rising": 46,
     "falling": 0,
     "opposite": false
   },
@@ -34,29 +34,29 @@
     "modes": [
       {
         "mode": 1,
-        "variance_fraction": 0.895644,
+        "variance_fraction": 0.896382,
         "separated": true,
-        "series_slope_per_decade": 0.238426,
+        "series_slope_per_decade": 0.24253,
         "series_p_value": 0.0,
         "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 2,
-        "variance_fraction": 0.067737,
+        "variance_fraction": 0.06786,
         "separated": true,
-        "series_slope_per_decade": 0.076422,
-        "series_p_value": 0.089331,
+        "series_slope_per_decade": 0.067097,
+        "series_p_value": 0.148186,
         "series_verdict": "NOT SIGNIFICANT"
       },
       {
         "mode": 3,
-        "variance_fraction": 0.013442,
+        "variance_fraction": 0.013874,
         "separated": true,
-        "series_slope_per_decade": 0.241587,
+        "series_slope_per_decade": 0.247324,
         "series_p_value": 1e-06,
         "series_verdict": "SIGNIFICANT"
       }
     ],
-    "n_eff": 294.934646
+    "n_eff": 290.463903
   }
 }

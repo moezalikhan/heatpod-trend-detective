@@ -39,12 +39,20 @@ HEAT_INDEX = "HEAT_INDEX"
 # Land mask and area weights
 # ---------------------------------------------------------------------------
 
-def land_mask(lat: xr.DataArray, lon: xr.DataArray) -> xr.DataArray:
-    """True where the grid cell center is on land (Natural Earth 1:50m land)."""
+def land_mask(lat: xr.DataArray, lon: xr.DataArray, state: str | None = None) -> xr.DataArray:
+    """True where the grid cell center is on land (Natural Earth 1:50m land).
+
+    With `state`, also inside that US state (Natural Earth 1:50m admin-1), so a
+    box around Florida does not include squares in Alabama or Georgia.
+    """
     import regionmask  # imported here: heavy, and only needed for real data
 
-    land = regionmask.defined_regions.natural_earth_v5_1_2.land_50
-    return land.mask(lon, lat).notnull().rename("land_mask")
+    ne = regionmask.defined_regions.natural_earth_v5_1_2
+    mask = ne.land_50.mask(lon, lat).notnull()
+    if state:
+        states = ne.us_states_50
+        mask = mask & (states.mask(lon, lat) == states.map_keys(state))
+    return mask.rename("land_mask")
 
 
 def area_weights(lat: xr.DataArray) -> xr.DataArray:
@@ -131,7 +139,7 @@ def prepare_variable(daily: xr.DataArray, mask: xr.DataArray, baseline=BASELINE)
     region_daily = regional_mean(daily, mask)
 
     ds = xr.Dataset({
-        "land_mask": mask,
+        "land_mask": mask.drop_vars([c for c in mask.coords if c not in ("lat", "lon")]),
         "area_weight": area_weights(daily["lat"]),
         # Monthly arrays use the "time" axis (first of month); yearly arrays use "year".
         "monthly_mean": monthly,
@@ -166,9 +174,10 @@ def prepare_region(region: Region, raw_dir: Path = RAW_DIR) -> list[Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     first = load_daily(region, catalog.power_codes()[0], raw_dir)
-    mask = land_mask(first["lat"], first["lon"]) if region.land_mask \
+    mask = land_mask(first["lat"], first["lon"], region.state) if region.land_mask \
         else xr.ones_like(first.isel(time=0), dtype=bool).drop_vars("time").rename("land_mask")
-    log.info("%s: %d of %d cells are land", region.key, int(mask.sum()), mask.size)
+    log.info("%s: %d of %d cells are land%s", region.key, int(mask.sum()), mask.size,
+             f" in {region.state}" if region.state else "")
 
     written = []
     for code, var in catalog.variables.items():

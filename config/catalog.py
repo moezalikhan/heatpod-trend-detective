@@ -130,6 +130,7 @@ class Region:
     box: Box
     tiles: tuple[Box, ...]
     land_mask: bool = True
+    state: str | None = None        # clip the grid to this US state (Natural Earth admin-1)
 
 
 def load_regions(path: str | Path = REGIONS_FILE) -> dict[str, Region]:
@@ -152,5 +153,6 @@ def load_regions(path: str | Path = REGIONS_FILE) -> dict[str, Region]:
         if abs(sum(t.height * t.width for t in tiles) - box.height * box.width) > 1e-6:
             raise ValueError(f"{key}: tiles do not cover the region box exactly")
         regions[key] = Region(key=key, name=r["name"], box=box, tiles=tiles,
-                              land_mask=bool(r.get("land_mask", True)))
+                              land_mask=bool(r.get("land_mask", True)),
+                              state=r.get("state"))
     return regions

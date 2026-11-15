@@ -24,13 +24,14 @@
       "lon": -80.19
     }
   ],
+  "state": "Florida",
   "box": {
     "lat_min": 24.5,
     "lat_max": 31.0,
     "lon_min": -87.6,
     "lon_max": -80.0
   },
-  "n_land_cells": 53,
+  "n_land_cells": 46,
   "variables": [
     "T2M",
     "T2M_MAX",

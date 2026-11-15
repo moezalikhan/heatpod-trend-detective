@@ -65,7 +65,8 @@ terms:
     title: Why remove the sea?
     text: >-
       Squares over the ocean behave differently from land, and people live on
-      land. We keep only squares whose center is on land (Natural Earth map).
+      land. We keep only squares whose center is on land inside the state we
+      study (Natural Earth map), so Florida does not include Alabama or Georgia.
 
   false_discovery_rate:
     title: Why are some squares grey?
