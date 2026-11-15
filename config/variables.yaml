@@ -1,6 +1,7 @@
 # Variable catalog (docs/PLAN.md Section 3, Module 1).
 # Single source of truth for the pipeline and the app; read it with config/catalog.py.
 # source: "power" means downloaded from NASA POWER; "calculated" means the pipeline derives it.
+# extremes: true means the extremes engine (Module 6) fits GEV to this variable's yearly maximum.
 period:
   start: 1981-01-01
   end: 2025-12-31
@@ -20,6 +21,7 @@ variables:
     unit: "°C"
     source: power
     definition: The hottest moment of each day
+    extremes: true
     why_it_matters: >-
       Hotter afternoons cause heat stress, damage crops and push up
       electricity demand for cooling.
@@ -38,6 +40,7 @@ variables:
     unit: mm/day
     source: power
     definition: Rain and snow, in millimeters per day
+    extremes: true
     why_it_matters: >-
       Changes in rain decide floods and droughts, and how much water
       farms and cities have.
@@ -49,6 +52,7 @@ variables:
     inputs: [T2M_MAX, RH2M]
     method: NOAA heat index formula
     definition: Temperature and humidity combined into "feels like" heat
+    extremes: true
     why_it_matters: >-
       This is the heat people actually feel. Heat wave health warnings
       are based on it.

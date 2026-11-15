@@ -31,6 +31,7 @@ class Variable:
     inputs: tuple[str, ...] = ()
     method: str | None = None
     limitation: str | None = None
+    extremes: bool = False          # fit extreme value statistics (Module 6)
 
     @property
     def is_calculated(self) -> bool:
@@ -48,6 +49,10 @@ class Catalog:
     def power_codes(self) -> list[str]:
         """Codes the downloader requests from NASA POWER."""
         return [v.code for v in self.variables.values() if v.source == "power"]
+
+    def extreme_codes(self) -> list[str]:
+        """Codes whose yearly maximum gets extreme value analysis."""
+        return [v.code for v in self.variables.values() if v.extremes]
 
     def __getitem__(self, code: str) -> Variable:
         return self.variables[code]

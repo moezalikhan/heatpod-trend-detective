@@ -14,6 +14,10 @@ def test_catalog_has_four_power_variables_and_heat_index():
     assert cat["HEAT_INDEX"].inputs == ("T2M_MAX", "RH2M")
 
 
+def test_extremes_variables():
+    assert load_catalog().extreme_codes() == ["T2M_MAX", "PRECTOTCORR", "HEAT_INDEX"]
+
+
 def test_every_variable_has_plain_text_fields():
     for v in load_catalog().variables.values():
         assert v.name and v.unit and v.definition and v.why_it_matters
