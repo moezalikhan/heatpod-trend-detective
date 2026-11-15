@@ -83,10 +83,18 @@ def stripes(annual: pd.DataFrame, unit: str) -> alt.Chart:
     return style(chart)
 
 
+# Time axes: one tick every 5 years (1985, 1990, ... 2025).
+YEAR_TICKS = [alt.DateTime(year=y, month=1, date=1) for y in range(1985, 2026, 5)]
+
+
+def _time_x() -> alt.X:
+    return alt.X("time:T", title=None, axis=alt.Axis(values=YEAR_TICKS, format="%Y", labelAngle=0))
+
+
 def time_series(monthly: pd.DataFrame, unit: str, verdict: dict) -> alt.LayerChart:
     """Monthly anomalies with the trend line and its 95% band, plus a hover crosshair."""
     color = GREY if not verdict["significant"] else (UP if verdict["slope_per_decade"] > 0 else DOWN)
-    base = alt.Chart(monthly).encode(x=alt.X("time:T", title=None))
+    base = alt.Chart(monthly).encode(x=_time_x())
     y_title = f"Difference from normal ({unit})"
 
     band = base.mark_area(opacity=0.18, color=color).encode(
@@ -106,7 +114,8 @@ def time_series(monthly: pd.DataFrame, unit: str, verdict: dict) -> alt.LayerCha
     dot = base.mark_point(filled=True, color=INK, size=40).encode(
         y="anomaly:Q", opacity=alt.when(hover).then(alt.value(1)).otherwise(alt.value(0)))
 
-    chart = alt.layer(band, zero, months, trend, catcher, rule, dot).properties(height=320, width="container")
+    chart = alt.layer(band, zero, months, trend, catcher, rule, dot).properties(
+        height=320, width="container", padding={"top": 10, "left": 5, "right": 5, "bottom": 5})
     return style(chart)
 
 
@@ -193,7 +202,7 @@ def pod_series(series: pd.DataFrame) -> alt.LayerChart:
     """One mode's time series: thin monthly line and a 12-month running mean."""
     df = series.sort_values("time").assign(
         smooth=lambda d: d["value"].rolling(12, center=True, min_periods=6).mean())
-    base = alt.Chart(df).encode(x=alt.X("time:T", title=None))
+    base = alt.Chart(df).encode(x=_time_x())
     zero = alt.Chart(pd.DataFrame({"y": [0]})).mark_rule(color=RULE).encode(y="y:Q")
     raw = base.mark_line(color=SLATE, strokeWidth=0.8, opacity=0.5).encode(
         y=alt.Y("value:Q", title="Pattern strength (standard deviations)"))
@@ -201,7 +210,8 @@ def pod_series(series: pd.DataFrame) -> alt.LayerChart:
         y="smooth:Q",
         tooltip=[alt.Tooltip("time:T", title="Month", format="%B %Y"),
                  alt.Tooltip("smooth:Q", title="12-month average", format="+.2f")])
-    return style(alt.layer(zero, raw, smooth).properties(height=220, width="container"))
+    return style(alt.layer(zero, raw, smooth).properties(
+        height=220, width="container", padding={"top": 10, "left": 5, "right": 5, "bottom": 5}))
 
 
 # ---------------------------------------------------------------------------
