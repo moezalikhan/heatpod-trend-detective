@@ -16,7 +16,7 @@ A web app where a student picks a weather variable and a place. It shows 45 year
 2. **Is it changing the same way everywhere?** POD (Proper Orthogonal Decomposition) pattern map.
 3. **Are the worst days getting worse?** Extreme value analysis.
 
-Two ready demos: Florida (humid heat) and Phoenix, Arizona (dry heat): same country, same NASA data, opposite kinds of heat.
+Two ready demos: Florida (humid heat) and Phoenix region, Arizona (dry heat): same country, same NASA data, opposite kinds of heat.
 
 ---
 
@@ -57,7 +57,7 @@ Heat index uses the NOAA (National Oceanic and Atmospheric Administration) formu
 ### Regions
 
 - **Florida:** latitude 24.5 to 31.0, longitude minus 87.6 to minus 80.0
-- **Phoenix, Arizona:** latitude 31.5 to 35.5, longitude minus 114.5 to minus 110.0 (Sonoran Desert lowlands to the plateau near Flagstaff)
+- **Phoenix region, Arizona:** latitude 31.5 to 35.5, longitude minus 114.5 to minus 110.0 (Sonoran Desert lowlands to the plateau near Flagstaff)
 - Ocean grid cells are removed with a land mask (Florida's box contains a lot of sea).
 
 ---

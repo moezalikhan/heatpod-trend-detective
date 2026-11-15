@@ -7,7 +7,7 @@
 
 ## High-level summary (short)
 
-HeatPOD Trend Detective is a web app that turns 45 years of NASA POWER (MERRA-2) data into a guided investigation. A student picks a place and a variable and gets three plain answers, each backed by a tested statistic: Is it changing (autocorrelation-corrected Mann-Kendall trend test)? Is it changing the same way everywhere (per-square trends with false discovery rate control, and POD pattern maps)? Are the worst days getting worse (extreme value analysis with bootstrap ranges)? Two demo cases, Florida (humid heat) and Phoenix, Arizona (dry heat): same country, same NASA data, opposite kinds of heat. Florida's heat index rises more than twice as fast as its air temperature, and Phoenix is drying while it warms.
+HeatPOD Trend Detective is a web app that turns 45 years of NASA POWER (MERRA-2) data into a guided investigation. A student picks a place and a variable and gets three plain answers, each backed by a tested statistic: Is it changing (autocorrelation-corrected Mann-Kendall trend test)? Is it changing the same way everywhere (per-square trends with false discovery rate control, and POD pattern maps)? Are the worst days getting worse (extreme value analysis with bootstrap ranges)? Two demo cases, Florida (humid heat) and Phoenix region, Arizona (dry heat): same country, same NASA data, opposite kinds of heat. Florida's heat index rises more than twice as fast as its air temperature, and Phoenix is drying while it warms.
 
 ## How it addresses the challenge
 
