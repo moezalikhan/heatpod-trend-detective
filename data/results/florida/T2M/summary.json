@@ -11,22 +11,22 @@
     "end": 2025
   },
   "trend": {
-    "slope_per_decade": 0.335878,
-    "ci_low": 0.228636,
-    "ci_high": 0.44312,
-    "sen_slope_per_decade": 0.347914,
+    "slope_per_decade": 0.332305,
+    "ci_low": 0.224839,
+    "ci_high": 0.439771,
+    "sen_slope_per_decade": 0.343293,
     "p_value": 0.0,
     "significant": true,
     "n": 540,
-    "n_eff": 340.111107,
+    "n_eff": 336.286862,
     "verdict": "SIGNIFICANT",
-    "sentence": "Air temperature at 2 meters has risen by 0.34 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
+    "sentence": "Air temperature at 2 meters has risen by 0.33 °C per decade since 1981. This trend is very unlikely to be chance (p < 0.001).",
     "test": "Mann-Kendall (Hamed-Rao, 12 lags)",
     "data": "monthly anomalies"
   },
   "cells": {
-    "n_land": 46,
-    "rising": 46,
+    "n_land": 42,
+    "rising": 42,
     "falling": 0,
     "opposite": false
   },
@@ -34,29 +34,29 @@
     "modes": [
       {
         "mode": 1,
-        "variance_fraction": 0.896382,
+        "variance_fraction": 0.908946,
         "separated": true,
-        "series_slope_per_decade": 0.24253,
+        "series_slope_per_decade": 0.241031,
         "series_p_value": 0.0,
         "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 2,
-        "variance_fraction": 0.06786,
+        "variance_fraction": 0.057871,
         "separated": true,
-        "series_slope_per_decade": 0.067097,
-        "series_p_value": 0.148186,
-        "series_verdict": "NOT SIGNIFICANT"
+        "series_slope_per_decade": 0.096113,
+        "series_p_value": 0.044183,
+        "series_verdict": "SIGNIFICANT"
       },
       {
         "mode": 3,
-        "variance_fraction": 0.013874,
+        "variance_fraction": 0.012253,
         "separated": true,
-        "series_slope_per_decade": 0.247324,
-        "series_p_value": 1e-06,
+        "series_slope_per_decade": 0.222701,
+        "series_p_value": 6e-05,
         "series_verdict": "SIGNIFICANT"
       }
     ],
-    "n_eff": 290.463903
+    "n_eff": 287.758228
   }
 }

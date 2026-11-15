@@ -31,7 +31,7 @@
     "lon_min": -87.6,
     "lon_max": -80.0
   },
-  "n_land_cells": 46,
+  "n_land_cells": 42,
   "variables": [
     "T2M",
     "T2M_MAX",

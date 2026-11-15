@@ -28,32 +28,55 @@ def catalog() -> Catalog:
     return load_catalog()
 
 
+# Every cache key includes the file's modification time and size. Streamlit Cloud
+# can pull a new commit without restarting, and a cache keyed only by
+# (region, variable) then mixed old and new results files on one page.
+
+def _stamp(path: Path) -> tuple[int, int]:
+    s = path.stat()
+    return s.st_mtime_ns, s.st_size
+
+
 @st.cache_data(show_spinner=False)
+def _json_cached(path: str, stamp: tuple[int, int]) -> dict:
+    return _json(Path(path))
+
+
+@st.cache_data(show_spinner=False)
+def _parquet_cached(path: str, stamp: tuple[int, int]) -> pd.DataFrame:
+    return pd.read_parquet(path)
+
+
+def _load_json(path: Path) -> dict:
+    return _json_cached(str(path), _stamp(path))
+
+
 def index() -> dict:
-    return _json(RESULTS / "index.json")
+    return _load_json(RESULTS / "index.json")
 
 
-@st.cache_data(show_spinner=False)
 def region(key: str) -> dict:
-    return _json(RESULTS / key / "region.json")
+    return _load_json(RESULTS / key / "region.json")
 
 
-@st.cache_data(show_spinner=False)
 def outline(key: str) -> dict:
-    return _json(RESULTS / key / "outline.geojson")
+    return _load_json(RESULTS / key / "outline.geojson")
 
 
-@st.cache_data(show_spinner=False)
 def summary(key: str, code: str) -> dict:
-    return _json(RESULTS / key / code / "summary.json")
+    return _load_json(RESULTS / key / code / "summary.json")
 
 
-@st.cache_data(show_spinner=False)
 def table(key: str, code: str, name: str) -> pd.DataFrame:
     """One of: series_monthly, series_annual, cells, pod_series."""
-    return pd.read_parquet(RESULTS / key / code / f"{name}.parquet")
+    path = RESULTS / key / code / f"{name}.parquet"
+    return _parquet_cached(str(path), _stamp(path))
 
 
 @st.cache_data(show_spinner=False)
-def glossary() -> dict:
+def _glossary_cached(stamp: tuple[int, int]) -> dict:
     return yaml.safe_load(GLOSSARY.read_text(encoding="utf-8"))
+
+
+def glossary() -> dict:
+    return _glossary_cached(_stamp(GLOSSARY))

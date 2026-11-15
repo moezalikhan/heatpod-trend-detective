@@ -52,7 +52,30 @@ def land_mask(lat: xr.DataArray, lon: xr.DataArray, state: str | None = None) ->
     if state:
         states = ne.us_states_50
         mask = mask & (states.mask(lon, lat) == states.map_keys(state))
+        mask = mask & ~on_land_border(lat, lon, state)
     return mask.rename("land_mask")
+
+
+def on_land_border(lat: xr.DataArray, lon: xr.DataArray, state: str, tol: float = 0.01) -> xr.DataArray:
+    """True where a cell center sits on the state's border with another state or country.
+
+    Florida's northern border runs along 31.0 N, exactly where a row of grid
+    centers lies; those squares are half in Alabama, so they are left out.
+    Coastal squares are kept (the coast is not a land border).
+    """
+    import regionmask
+    from shapely.geometry import Point
+    from shapely.ops import unary_union
+
+    ne = regionmask.defined_regions.natural_earth_v5_1_2
+    poly = ne.us_states_50[state].polygon
+    others = [p for n, p in zip(ne.us_states_50.names, ne.us_states_50.polygons) if n != state]
+    others += [p for n, p in zip(ne.countries_50.names, ne.countries_50.polygons)
+               if n != "United States of America"]
+    neighbours = unary_union([p for p in others if p.distance(poly) < 0.05])
+    border = poly.boundary.intersection(neighbours.buffer(0.02))
+    hits = [[Point(float(lo), float(la)).distance(border) < tol for lo in lon.values] for la in lat.values]
+    return xr.DataArray(np.array(hits), dims=("lat", "lon"), coords={"lat": lat.values, "lon": lon.values})
 
 
 def area_weights(lat: xr.DataArray) -> xr.DataArray:

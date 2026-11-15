@@ -19,11 +19,11 @@ Florida (humid heat) and Phoenix, Arizona (dry heat): same country, same NASA da
 
 | | Florida (humid heat) | Phoenix, Arizona (dry heat) |
 |---|---|---|
-| Air temperature | +0.34 °C per decade, significant, all 46 squares | +0.44 °C per decade, significant, all 64 squares |
+| Air temperature | +0.33 °C per decade, significant, all 42 squares | +0.44 °C per decade, significant, all 64 squares |
 | Heat index ("feels like") | **+0.86 °C per decade**, significant: rising more than twice as fast as air temperature | +0.44 °C per decade, significant |
 | Humidity | no clear trend | **-1.5 percentage points per decade**, significant |
 | Rain | no clear trend | -0.08 mm/day per decade, significant (about -9% of its average per decade) |
-| Hottest day of the year | +0.15 °C per decade, no clear trend region-wide; the highest heat index of the year rises significantly in 21 of 46 squares (south peninsula) | **+0.31 °C per decade, significant** (p = 0.018); highest heat index of the year +0.64 °C per decade (p < 0.001) |
+| Hottest day of the year | +0.16 °C per decade, no clear trend region-wide (p = 0.08); the highest heat index of the year rises significantly in 21 of 42 squares (south peninsula) | **+0.31 °C per decade, significant** (p = 0.018); highest heat index of the year +0.64 °C per decade (p < 0.001) |
 | 20-year level | no clear change: the sea and afternoon storms cap Florida's extremes | heat index level that came once every 20 years now comes about every 2 years (see limitations) |
 
 All numbers are for 1981 to 2025, from monthly anomalies (seasonal cycle removed).
@@ -42,7 +42,7 @@ Links open a specific case, for example `?region=phoenix&variable=HEAT_INDEX&ste
 
 - **NASA POWER** daily regional API (most weather variables from **MERRA-2**), about 55 km grid (0.5 x 0.625 degrees), 1 January 1981 to 31 December 2025, local solar time.
 - Variables: `T2M` air temperature at 2 m, `T2M_MAX` daily maximum temperature, `RH2M` relative humidity, `PRECTOTCORR` precipitation, plus the **NOAA heat index** calculated from `T2M_MAX` and `RH2M`.
-- Regions: Florida (24.5 to 31.0 N, 87.6 to 80.0 W) and Phoenix (31.5 to 35.5 N, 114.5 to 110.0 W). Only squares whose center is on land inside the state are kept (Natural Earth 1:50m land and US states): 46 squares in Florida, 64 in Arizona.
+- Regions: Florida (24.5 to 31.0 N, 87.6 to 80.0 W) and Phoenix (31.5 to 35.5 N, 114.5 to 110.0 W). Only squares whose center is on land inside the state are kept (Natural Earth 1:50m land and US states), leaving out squares centered on a state or country border: 42 squares in Florida, 64 in Arizona.
 
 ## Method
 
@@ -60,7 +60,7 @@ Links open a specific case, for example `?region=phoenix&variable=HEAT_INDEX&ste
 
 ## Validation
 
-- **79 pipeline tests** on fake data with known answers, **63 app tests** (Streamlit AppTest: every step, both regions, every variable, the demo). All run in GitHub Actions on every push.
+- **79 pipeline tests** on fake data with known answers, **64 app tests** (Streamlit AppTest: every step, both regions, every variable, the demo). All run in GitHub Actions on every push.
 - **Simulation of the trend test** (1500 series of 540 months, 5% level):
 
   | Test | Pure noise | Linked months (0.6) | Strongly linked (0.8) |
