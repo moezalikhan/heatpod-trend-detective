@@ -66,9 +66,20 @@
 .demo-bar p { margin: 0.25rem 0 0 0; }
 
 /* Plain table. */
-table.plain { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
-table.plain th { text-align: left; font-weight: 400; color: var(--slate); border-bottom: 1px solid var(--ink); padding: 0.3rem 0.5rem 0.3rem 0; }
-table.plain td { border-bottom: 1px solid var(--rule); padding: 0.4rem 0.5rem 0.4rem 0; vertical-align: top; }
+/* Plain ruled table: horizontal lines only (overrides Streamlit's cell borders). */
+table.plain { border-collapse: collapse; width: 100%; font-size: 0.9rem; border: 0 !important; margin: 0.5rem 0 0.75rem 0; }
+table.plain th, table.plain td {
+  border: 0 !important;
+  border-bottom: 1px solid var(--rule) !important;
+  padding: 0.6rem 1.5rem 0.6rem 0 !important;
+  text-align: left;
+  vertical-align: top;
+  background: transparent !important;
+}
+table.plain th { font-weight: 400; color: var(--slate); border-bottom: 1px solid var(--ink) !important; }
+table.plain td:first-child, table.plain th:first-child { width: 9.5rem; white-space: nowrap; }
+table.plain td:nth-child(2), table.plain th:nth-child(2) { width: 16rem; }
+table.plain td:last-child, table.plain th:last-child { padding-right: 0 !important; }
 
 /* Thin divider lines between sections. */
 hr, .rule { border: 0; border-top: 1px solid var(--rule); margin: 1.5rem 0; }
