@@ -44,11 +44,30 @@ def style(chart: alt.TopLevelMixin) -> alt.TopLevelMixin:
     )
 
 
-def diverging(values, title: str) -> alt.Scale:
+def nice_limit(values) -> float:
+    """Largest absolute value, rounded UP to one significant figure (0.43 -> 0.5, 1.6 -> 2)."""
+    v = np.abs(np.asarray(values, dtype=float))
+    m = float(np.nanmax(v)) if v.size and np.isfinite(v).any() else 1.0
+    if m <= 0:
+        return 1.0
+    f = 10 ** np.floor(np.log10(m))
+    return float(np.ceil(round(m / f, 6)) * f)
+
+
+def diverging(values, title: str = "") -> alt.Scale:
     """Blue (less) to red (more) with white fixed at zero, symmetric around zero."""
-    m = float(np.nanmax(np.abs(np.asarray(values, dtype=float)))) if len(values) else 1.0
-    m = m if m > 0 else 1.0
-    return alt.Scale(domain=[-m, m], domainMid=0, range=RDBU, clamp=True)
+    n = nice_limit(values)
+    return alt.Scale(domain=[-n, n], domainMid=0, range=RDBU, clamp=True)
+
+
+def three_tick_legend(values, title: str) -> alt.Legend:
+    """Legend with only -n, 0, +n, rounded, so labels never overlap."""
+    n = nice_limit(values)
+    decimals = max(0, int(-np.floor(np.log10(n))))
+    fmt = f"+.{decimals}f"
+    return alt.Legend(title=title, titleLimit=400, gradientLength=220, values=[-n, 0, n],
+                      labelExpr=f"datum.value == 0 ? '0' : format(datum.value, '{fmt}')",
+                      labelOverlap=False)
 
 
 def stripes(annual: pd.DataFrame, unit: str) -> alt.Chart:
@@ -126,10 +145,9 @@ def cell_map(cells: pd.DataFrame, outline: dict, value: str, legend_title: str,
     """Grid cells colored on a diverging scale; optional grey for not significant."""
     extra = [significant_col] if significant_col else []
     fc = _cell_features(cells, value, extra)
-    scale = diverging([f["properties"]["value"] for f in fc["features"]
-                       if f["properties"]["value"] is not None], legend_title)
-    color = alt.Color("properties.value:Q", scale=scale,
-                      legend=alt.Legend(title=legend_title, gradientLength=220, format=fmt))
+    vals = [f["properties"]["value"] for f in fc["features"] if f["properties"]["value"] is not None]
+    color = alt.Color("properties.value:Q", scale=diverging(vals),
+                      legend=three_tick_legend(vals, legend_title))
     if significant_col:
         color = alt.when(f"datum.properties.{significant_col}").then(color).otherwise(alt.value(GREY))
     tips = [alt.Tooltip("properties.value:Q", title=tooltip_title, format=fmt),
@@ -141,7 +159,9 @@ def cell_map(cells: pd.DataFrame, outline: dict, value: str, legend_title: str,
     squares = alt.Chart(_geo(fc)).mark_geoshape(stroke=PAPER, strokeWidth=1).encode(
         color=color, tooltip=tips)
     land = alt.Chart(_geo(outline)).mark_geoshape(fill=None, stroke=INK, strokeWidth=1)
-    chart = alt.layer(squares, land).project(type="mercator").properties(height=420, width="container")
+    # Side padding keeps the outer legend labels (for example -0.4) inside the chart.
+    chart = alt.layer(squares, land).project(type="mercator").properties(
+        height=420, width="container", padding={"left": 24, "right": 24, "top": 4, "bottom": 4})
     return style(chart)
 
 
