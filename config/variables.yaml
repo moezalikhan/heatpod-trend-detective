@@ -1,5 +1,6 @@
-# Variables (docs/PLAN.md Section 3). Source is NASA POWER daily data.
-# "power" means the value is downloaded; "calculated" means the pipeline derives it.
+# Variable catalog (docs/PLAN.md Section 3, Module 1).
+# Single source of truth for the pipeline and the app; read it with config/catalog.py.
+# source: "power" means downloaded from NASA POWER; "calculated" means the pipeline derives it.
 period:
   start: 1981-01-01
   end: 2025-12-31
@@ -10,24 +11,36 @@ variables:
     unit: "°C"
     source: power
     definition: How warm the air is at head height
+    why_it_matters: >-
+      The clearest sign of a warming climate. It affects crops, water use
+      and how much energy people need for cooling.
 
   T2M_MAX:
     name: Daily maximum temperature
     unit: "°C"
     source: power
     definition: The hottest moment of each day
+    why_it_matters: >-
+      Hotter afternoons cause heat stress, damage crops and push up
+      electricity demand for cooling.
 
   RH2M:
     name: Relative humidity
     unit: "%"
     source: power
     definition: How much moisture is in the air, compared with the most it can hold
+    why_it_matters: >-
+      Humid air makes heat more dangerous, because sweat cannot cool the
+      body when the air is already full of moisture.
 
   PRECTOTCORR:
     name: Precipitation
     unit: mm/day
     source: power
     definition: Rain and snow, in millimeters per day
+    why_it_matters: >-
+      Changes in rain decide floods and droughts, and how much water
+      farms and cities have.
 
   HEAT_INDEX:
     name: Heat index
@@ -36,6 +49,9 @@ variables:
     inputs: [T2M_MAX, RH2M]
     method: NOAA heat index formula
     definition: Temperature and humidity combined into "feels like" heat
+    why_it_matters: >-
+      This is the heat people actually feel. Heat wave health warnings
+      are based on it.
     limitation: >-
       Combines the daily maximum temperature with daily average humidity,
       so it is an approximation.

@@ -38,7 +38,8 @@ heatpod-trend-detective/
     content/            # glossary.yaml with plain language definitions
   config/
     regions.yaml        # region boxes and tiles
-    variables.yaml      # codes, units, plain definitions
+    variables.yaml      # variable catalog: codes, units, definitions, why it matters
+    catalog.py          # load_catalog(): the one loader used by pipeline and app
   pipeline/
     heatpod/            # download, clean, trends, pod, extremes, export
     tests/
