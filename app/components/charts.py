@@ -75,16 +75,16 @@ def stripes(annual: pd.DataFrame, unit: str) -> alt.Chart:
     df = annual.assign(label=annual["anomaly"].map(lambda v: f"{v:+.2f} {unit}"))
     chart = alt.Chart(df).mark_rect().encode(
         x=alt.X("year:O", title=None, axis=alt.Axis(
-            values=[1981, 1990, 2000, 2010, 2020, 2025], labelAngle=0, ticks=False,
-            domain=False, labelFont=MONO)),
+            values=TICK_YEARS, labelAngle=0, ticks=False, domain=False, labelFont=MONO)),
         color=alt.Color("anomaly:Q", scale=diverging(df["anomaly"], unit), legend=None),
         tooltip=[alt.Tooltip("year:O", title="Year"), alt.Tooltip("label:N", title="Difference from normal")],
     ).properties(height=44, width="container")
     return style(chart)
 
 
-# Time axes: one tick every 5 years (1985, 1990, ... 2025).
-YEAR_TICKS = [alt.DateTime(year=y, month=1, date=1) for y in range(1985, 2026, 5)]
+# Time axes: one tick every 5 years (1985, 1990, ... 2025), shared by every time chart.
+TICK_YEARS = list(range(1985, 2026, 5))
+YEAR_TICKS = [alt.DateTime(year=y, month=1, date=1) for y in TICK_YEARS]
 
 
 def _time_x() -> alt.X:
@@ -236,7 +236,7 @@ def yearly_maxima(annual: pd.DataFrame, ext: dict, unit: str, show_level: bool) 
     period_scale = alt.Scale(domain=[f"{a0}-{a1}", f"{b0}-{b1}"], range=[PERIOD_OLD, PERIOD_NEW])
     color = alt.Color("period:N", scale=period_scale, legend=alt.Legend(title=None))
     x = alt.X("year:Q", title=None, scale=alt.Scale(domain=[1980, 2026], nice=False),
-              axis=alt.Axis(values=list(range(1985, 2026, 5)), format="d", labelAngle=0))
+              axis=alt.Axis(values=TICK_YEARS, format="d", labelAngle=0))
     dots = alt.Chart(df).mark_point(filled=True, size=55, opacity=1).encode(
         x=x, y=alt.Y("y:Q", title=y_title, scale=alt.Scale(zero=False)), color=color,
         tooltip=[alt.Tooltip("year:Q", title="Year", format="d"),
