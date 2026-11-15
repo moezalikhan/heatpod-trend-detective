@@ -4,12 +4,25 @@ A guided investigation in five steps. The app only reads data/results/
 (precomputed by the pipeline); it never calls the NASA API.
 """
 
+import sys
 from html import escape
 from pathlib import Path
 
 import streamlit as st
 
 ROOT = Path(__file__).parent
+
+# Streamlit Cloud pulls new commits without restarting and keeps imported modules
+# in memory, so changes in app/ or config/ stayed invisible until a manual reboot.
+# This file is re-read on every run: if any source file changed, drop our modules
+# so they are imported fresh below.
+_stamp = tuple(sorted((str(p), p.stat().st_mtime_ns)
+                      for d in ("app", "config") for p in (ROOT / d).rglob("*.py")))
+if getattr(sys, "_heatpod_src_stamp", None) != _stamp:
+    for name in [m for m in sys.modules if m.split(".")[0] in ("app", "config")]:
+        del sys.modules[name]
+    sys._heatpod_src_stamp = _stamp
+
 st.set_page_config(page_title="HeatPOD Trend Detective", layout="wide")
 st.markdown(f"<style>{(ROOT / 'app' / 'styles.css').read_text()}</style>", unsafe_allow_html=True)
 
